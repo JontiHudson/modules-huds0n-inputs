@@ -94,7 +94,6 @@ function validateNumber({
 }): Validation.Function<string> {
   return (text = '') => {
     if (isNaN(Number(text)) || text?.slice(-1) === '.') {
-      console.log(12);
       return 'Invalid number';
     }
 

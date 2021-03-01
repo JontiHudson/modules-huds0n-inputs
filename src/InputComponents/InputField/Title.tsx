@@ -31,7 +31,7 @@ export function Title(props: SubComponentProps) {
   const translateXAnim = useRef(new Animated.Value(0));
   const translateYAnim = useRef(new Animated.Value(0));
 
-  const [{ width = 0 } = {}, onLayout] = useLayout();
+  const [{ width }, onLayout] = useLayout();
 
   const fontSize = titleStyle?.fontSize || DEFAULT_MAX_TITLE_SIZE;
   const titleScale = MIN_TITLE_SIZE / fontSize;

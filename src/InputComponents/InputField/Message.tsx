@@ -25,7 +25,7 @@ export function Message({
 
   const translateY = useAnimatedValue(0);
 
-  const [{ height = 0 } = {}, onLayout] = useLayout();
+  const [{ height, isInitialized }, onLayout] = useLayout();
 
   useEffect(() => {
     text && setDisplayText(text);
@@ -35,7 +35,7 @@ export function Message({
         toValue: text ? 0 : -height * 1.5,
         useNativeDriver,
       }).start();
-  }, [height, text]);
+  }, [height, isInitialized, text]);
 
   const style = {
     transform: [{ translateY }],
