@@ -68,7 +68,7 @@ export default function InputsPlayground() {
             maximumDate={new Date()}
             title="Date of Birth"
             titleHighlightColor={colors.BLUE}
-            onSubmitEditing={submit}
+            onSubmitEditing={validChanges && submit}
           />
 
           <View style={styles.footer}>
