@@ -1,15 +1,14 @@
-import { Core } from '@huds0n/core';
+import * as InputState from '../state';
+import * as Types from '../types';
 
-import { InputManagerComponent, dismissInput } from './Component';
-import { useInputState } from './helpers';
-import * as Types from './types';
+import { InputManagerComponent } from './Component';
 
 export namespace InputManager {
   export type Props = Types.InputManagerProps;
 }
 
 export const InputManager = Object.assign(InputManagerComponent, {
-  dismiss: dismissInput,
-  setDarkMode: Core.setDarkMode,
-  useInputState,
+  dismiss: InputState.dismissInput,
+  useFocusedId: InputState.useFocusedInput,
+  useCustomInput: InputState.useCustomInput,
 });

@@ -4,7 +4,6 @@ import { OutputComponent } from './OutputComponent';
 
 import { Validation } from '../../types';
 
-import { theming } from './theming';
 import * as Types from './types';
 
 export namespace PickerInput {
@@ -16,15 +15,12 @@ export namespace PickerInput {
   export type ValidationError = Validation.Error;
   export type ValidationProp<T> = Validation.Prop<T>;
 
-  export type Component = Types.Component & { theming: typeof theming };
+  export type Component = Types.Component;
 }
 
-export const PickerInput: PickerInput.Component = Object.assign(
-  createCustomInput<Types.SpecficProps<any>, any>(
-    OutputComponent,
-    InputComponent,
-  ),
-  { theming },
-);
+export const PickerInput: PickerInput.Component = createCustomInput<
+  Types.SpecficProps<any>,
+  any
+>(OutputComponent, InputComponent);
 
 export * from './helpers';

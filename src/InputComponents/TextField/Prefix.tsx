@@ -1,6 +1,8 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
+import { defaultStyles } from '../TextInput/helpers';
+
 import { PrefixProps } from './types';
 
 export function Prefix({
@@ -19,8 +21,11 @@ export function Prefix({
       <Text
         {...rest}
         style={StyleSheet.flatten([
+          defaultStyles.base,
           style,
+          !!error && defaultStyles.error,
           !!error && errorStyle,
+          disabled && defaultStyles.disabled,
           disabled && disabledStyle,
         ])}
       >

@@ -1,18 +1,16 @@
 import React from 'react';
-import { Platform, Keyboard, StyleSheet, ViewStyle } from 'react-native';
+import { StyleSheet, ViewStyle, View, TouchableOpacity } from 'react-native';
 
-import { View } from '@huds0n/components';
 import {
   onDismount,
   onMount,
   useCallback,
   useEffect,
   useImperativeHandle,
-  useMemo,
   useNodeId,
 } from '@huds0n/utilities';
 
-import { InputManager } from '../../InputManager';
+import * as InputState from '../../state';
 import * as Types from '../../types';
 
 import { handleValueValidation } from '../helpers';
@@ -31,7 +29,7 @@ export namespace createCustomInput {
 
   export type SubComponent<
     P extends Object = {},
-    T = any
+    T = any,
   > = React.ComponentType<SubComponentProps<P, T>>;
 
   export type Props<P extends {}, T = any> = {
@@ -42,7 +40,7 @@ export namespace createCustomInput {
 
   export type Component<
     P extends Object = {},
-    T = any
+    T = any,
   > = React.ForwardRefExoticComponent<
     Props<P, T> & React.RefAttributes<RefType>
   >;
@@ -53,13 +51,6 @@ export namespace createCustomInput {
   export type ValidationProp<T> = Types.Validation.Prop<T>;
 }
 
-const InputController =
-  Platform.OS === 'ios'
-    ? require('../../InputManager/Component/slideModal/helpers')
-        .SlideModalController
-    : require('../../InputManager/Component/overlayModal/helpers')
-        .OverlayModalController;
-
 export function createCustomInput<P extends Object, T = any>(
   OutputComponent: createCustomInput.SubComponent<P, T>,
   InputComponent?: createCustomInput.SubComponent<P, T>,
@@ -68,9 +59,10 @@ export function createCustomInput<P extends Object, T = any>(
   return React.forwardRef((props, ref) => {
     const {
       autoFocus,
+      downPress,
+      upPress,
       disabled,
       disabledStyle,
-      inputContainerStyle,
       onBlur,
       onFocus,
       outputContainerStyle,
@@ -79,42 +71,51 @@ export function createCustomInput<P extends Object, T = any>(
 
     const { error, onValueChange } = handleValueValidation(props);
 
-    const [viewNodeRef, viewRef] = useNodeId();
-    const focusedNodeId = InputController.useFocusedNodeId();
-    const isFocused = viewNodeRef.current === focusedNodeId;
+    const [viewNodeRef, viewRef] = useNodeId<View>();
+    const isFocused = InputState.useIsFocused(viewNodeRef);
 
-    const openInput = getInputClose(props, viewNodeRef.current);
+    const putInputComponent = useCallback(() => {
+      InputState.updateCustomInput(
+        viewNodeRef,
+        {
+          Component: InputComponent,
+          props: {
+            closeInput: InputState.dismissInput,
+            openInput: openInput,
+            isFocused: isFocused,
+            ...props,
+            error: error,
+            onValueChange: onValueChange,
+          },
+        },
+        { downPress, upPress, submitPress: null },
+      );
+    }, [...Object.values(props), isFocused, error, onValueChange]);
 
-    const effectDependancyHandle = useMemo(() => [Symbol('dependancyRef')], [
-      isFocused,
-      ...Object.values(props),
-    ]);
+    function openInput() {
+      if (disabled) {
+        return null;
+      }
+      putInputComponent();
 
-    useEffect(() => {
-      isFocused &&
-        InputComponent &&
-        InputController.setCustomInputComponent(
-          <InputComponent
-            closeInput={InputManager.dismiss}
-            openInput={openInput}
-            inputContainerStyle={inputContainerStyle}
-            isFocused={isFocused}
-            {...props}
-            error={error}
-            onValueChange={onValueChange}
-          />,
-        );
-    }, effectDependancyHandle);
+      return value;
+    }
 
     // Handle lifecycle
+
+    useEffect(() => {
+      if (isFocused) {
+        putInputComponent();
+      }
+    }, [putInputComponent]);
 
     onMount(() => {
       autoFocus && openInput();
     });
 
     onDismount(() => {
-      if (viewNodeRef.current === InputController.getFocusedNodeId()) {
-        InputManager.dismiss();
+      if (viewNodeRef.current === InputState.currentlyFocusedInput()?.id) {
+        InputState.dismissInput();
       }
     });
 
@@ -130,22 +131,23 @@ export function createCustomInput<P extends Object, T = any>(
       { skipMounts: true },
     );
 
-    handleIOSInputAccessory(props, isFocused, error);
-
     useImperativeHandle(ref, () => ({ focus: openInput }), [openInput]);
 
     return (
-      <View
+      <TouchableOpacity
+        // @ts-ignore
         ref={viewRef}
         style={StyleSheet.flatten([
           outputContainerStyle,
           disabled && disabledStyle,
         ])}
-        onPressThrough={openInput}
+        onPress={openInput}
+        // Doesn't change color
+        activeOpacity={1}
       >
         {
           <OutputComponent
-            closeInput={InputManager.dismiss}
+            closeInput={InputState.dismissInput}
             openInput={openInput}
             isFocused={isFocused}
             {...props}
@@ -153,64 +155,7 @@ export function createCustomInput<P extends Object, T = any>(
             onValueChange={onValueChange}
           />
         }
-      </View>
+      </TouchableOpacity>
     );
   });
-}
-
-function getInputClose<P extends Object>(
-  { disabled, value }: createCustomInput.Props<P>,
-  inputNodeId: number | undefined,
-) {
-  return useCallback(() => {
-    if (disabled) {
-      return null;
-    }
-
-    Keyboard.dismiss();
-    InputController.setFocusedNode(inputNodeId, 'CUSTOM');
-
-    return value;
-  }, [disabled, value, inputNodeId]);
-}
-
-function handleIOSInputAccessory<P extends Object>(
-  {
-    disableSubmit,
-    downPress,
-    onSubmitEditing,
-    upPress,
-    value,
-  }: createCustomInput.Props<P>,
-  isFocused: boolean,
-  error: createCustomInput.ValidationError,
-) {
-  if (Platform.OS === 'ios') {
-    useEffect(
-      () => {
-        const { InputAccessoryState } = require('../../InputAccessoryViewIOS');
-
-        if (isFocused) {
-          InputAccessoryState.setState({
-            upPress,
-            submitPress:
-              !disableSubmit && onSubmitEditing
-                ? () => onSubmitEditing?.(value, error)
-                : undefined,
-            downPress,
-          });
-        }
-      },
-      [
-        disableSubmit,
-        downPress,
-        error,
-        isFocused,
-        onSubmitEditing,
-        upPress,
-        value,
-      ],
-      { layout: 'AFTER' },
-    );
-  }
 }

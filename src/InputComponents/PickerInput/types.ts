@@ -1,14 +1,14 @@
+import { TextStyle } from "react-native";
 import {
-  TextStyle,
   PickerProps as PickerPropsRN,
   PickerItemProps as PickerItemPropsRN,
-} from 'react-native';
+} from "@react-native-picker/picker";
 
-import { createCustomInput } from '../CustomInput';
+import { createCustomInput } from "../CustomInput";
 
-import * as Types from '../../types';
+import * as Types from "../../types";
 
-export type ItemProps<T = any> = PickerItemPropsRN & {
+export type ItemProps<T = any> = PickerItemPropsRN<T> & {
   placeholder?: string;
   value: T;
 };
@@ -23,7 +23,7 @@ export type SpecficProps<T = any> = {
   placeholderStyle?: TextStyle;
 } & Omit<
   PickerPropsRN,
-  'enabled' | 'onValueChange' | 'selectedValue' | 'value'
+  "enabled" | "onValueChange" | "selectedValue" | "value" | "onFocus" | "onBlur"
 >;
 
 export type Props<T = any> = createCustomInput.Props<SpecficProps<T>, T>;

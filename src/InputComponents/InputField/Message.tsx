@@ -1,7 +1,7 @@
 import React from 'react';
 import { Animated, StyleSheet, Text, View } from 'react-native';
 
-import { Core } from '@huds0n/core';
+import { theme } from '@huds0n/theming/src/theme';
 
 import {
   useAnimatedValue,
@@ -41,28 +41,42 @@ export function Message({
     transform: [{ translateY }],
   };
 
+  const textStyle = StyleSheet.flatten([
+    defaultStyles.base,
+    messageStyle,
+    !!overrideColor && { color: overrideColor },
+  ]);
+
   return (
     <View
       style={{
         alignItems: 'flex-end',
-        paddingTop: Core.spacings.XS,
-        overflow: 'hidden',
+        marginTop: theme.spacings.XS,
+        height: textStyle.fontSize,
       }}
     >
-      <Animated.View style={style}>
-        <Text
-          ellipsizeMode="tail"
-          numberOfLines={1}
-          onLayout={onLayout}
-          style={StyleSheet.flatten([
-            { fontSize: Core.fontSizes.NOTE, fontWeight: '300' },
-            messageStyle,
-            { color: overrideColor },
-          ])}
-        >
-          {displayText || ' '}
-        </Text>
-      </Animated.View>
+      <View style={{ overflow: 'hidden' }}>
+        <Animated.View style={style}>
+          <Text
+            ellipsizeMode="tail"
+            numberOfLines={1}
+            onLayout={onLayout}
+            style={textStyle}
+          >
+            {displayText}
+          </Text>
+        </Animated.View>
+      </View>
     </View>
   );
 }
+
+export const defaultStyles = {
+  base: {
+    get color() {
+      return theme.colors.TEXT;
+    },
+    fontSize: theme.fontSizes.NOTE,
+    fontWeight: '300' as '300',
+  },
+};

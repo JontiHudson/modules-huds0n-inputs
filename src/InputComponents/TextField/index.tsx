@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 
-import { Core } from '@huds0n/core';
+import { theme } from '@huds0n/theming/src/theme';
 
 import { Validation } from '../../types';
 
@@ -10,8 +10,6 @@ import { InputField } from '../InputField';
 import { TextInput } from '../TextInput';
 
 import { Prefix } from './Prefix';
-
-import { theming } from './theming';
 import * as Types from './types';
 
 export namespace TextField {
@@ -22,36 +20,33 @@ export namespace TextField {
   export type ValidationError = Validation.Error;
   export type ValidationProp<T> = Validation.Prop<T>;
 
-  export type Component = Types.Component & { theming: typeof theming };
+  export type Component = Types.Component;
 }
 
-const _TextField = React.forwardRef<TextField.RefType, TextField.Props>(
-  (props, ref) => {
-    const { prefix, value, ...restProps } = props;
+export const TextField: TextField.Component = React.forwardRef<
+  TextField.RefType,
+  TextField.Props
+>((props, ref) => {
+  const { prefix, value, ...restProps } = props;
 
-    const { fieldProps, inputProps } = handleFieldInputAware(props);
+  const { fieldProps, inputProps } = handleFieldInputAware(props);
 
-    return (
-      <InputField isEmpty={!value} {...restProps} {...fieldProps}>
-        <View style={{ flexDirection: 'row' }}>
-          <Prefix {...props} error={fieldProps.error} />
-          <View style={{ flex: 1 }}>
-            <TextInput
-              ref={ref}
-              scrollEnabled={false}
-              underlineColorAndroid={Core.colors.TRANSPARENT}
-              {...restProps}
-              {...inputProps}
-              value={value}
-              {...(!fieldProps.isFocused && { placeholder: undefined })}
-            />
-          </View>
+  return (
+    <InputField isEmpty={!value} {...restProps} {...fieldProps}>
+      <View style={{ flexDirection: 'row' }}>
+        <Prefix {...props} error={fieldProps.error} />
+        <View style={{ flex: 1 }}>
+          <TextInput
+            ref={ref}
+            scrollEnabled={false}
+            underlineColorAndroid={theme.colors.TRANSPARENT}
+            {...restProps}
+            {...inputProps}
+            value={value}
+            {...(!fieldProps.isFocused && { placeholder: undefined })}
+          />
         </View>
-      </InputField>
-    );
-  },
-);
-
-export const TextField: TextField.Component = Object.assign(_TextField, {
-  theming,
+      </View>
+    </InputField>
+  );
 });

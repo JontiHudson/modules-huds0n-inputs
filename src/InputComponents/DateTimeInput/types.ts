@@ -7,6 +7,8 @@ import { createCustomInput } from '../CustomInput';
 export type MinuteInterval = 1 | 2 | 3 | 4 | 5 | 6 | 10 | 12 | 15 | 20 | 30;
 export type Mode = 'date' | 'time';
 export type Value = Date | null;
+export type WebInputFormat = string;
+export type WebInputFormatComponent = 'DD' | 'MM' | 'YYYY' | 'HH' | 'mm';
 
 export type FormatDisplayFn = (
   date: Date,
@@ -26,6 +28,8 @@ export type SpecficProps = {
   nullLabel?: string;
   nullPlaceholderStyle?: TextStyle;
   placeholderStyle?: TextStyle;
+  webInputFormat?: WebInputFormat;
+  invalidDateError?: string;
   value: Value;
 };
 

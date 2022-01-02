@@ -6,8 +6,6 @@ import { DateTimeInput } from '../DateTimeInput';
 import { handleFieldInputAware } from '../helpers';
 import { InputField } from '../InputField';
 
-import { theming } from './theming';
-
 export namespace DateTimeField {
   export type Props = InputField.ExtendProps<DateTimeInput.Props> & {
     minimiseTitleOnNull?: boolean;
@@ -25,10 +23,10 @@ export namespace DateTimeField {
 
   export type Component = React.ForwardRefExoticComponent<
     Props & React.RefAttributes<RefType>
-  > & { theming: typeof theming };
+  >;
 }
 
-const _DateTimeField = React.forwardRef<
+export const DateTimeField: DateTimeField.Component = React.forwardRef<
   DateTimeField.RefType,
   DateTimeField.Props
 >((props, ref) => {
@@ -50,8 +48,3 @@ const _DateTimeField = React.forwardRef<
     </InputField>
   );
 });
-
-export const DateTimeField: DateTimeField.Component = Object.assign(
-  _DateTimeField,
-  { theming },
-);

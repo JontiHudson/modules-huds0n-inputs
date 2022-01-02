@@ -1,7 +1,7 @@
 import React from 'react';
 import { Animated, StyleSheet, Text, View } from 'react-native';
 
-import { Core } from '@huds0n/core';
+import { theme } from '@huds0n/theming/src/theme';
 
 import { useEffect, useLayout, useMemo, useRef } from '@huds0n/utilities';
 
@@ -20,7 +20,7 @@ export function Title(props: SubComponentProps) {
     isRequired,
     overrideColor,
     title,
-    titleHighlightColor,
+    titleHighlightColor = theme.colors.PRIMARY,
     titleIsMinimised,
     titleStyle,
     useNativeDriver = true,
@@ -39,7 +39,7 @@ export function Title(props: SubComponentProps) {
   const minTranslateYOffset = useMemo(() => {
     return {
       x: -(width / titleScale - width) * 0.5,
-      y: -fontSize - Core.spacings.S * 2,
+      y: -fontSize - theme.spacings.S * 2,
     };
   }, [fontSize, width]);
 
@@ -74,7 +74,7 @@ export function Title(props: SubComponentProps) {
       numberOfLines={1}
       ellipsizeMode="tail"
       style={StyleSheet.flatten([
-        { color: Core.colors.TEXT, fontSize: Core.fontSizes.BODY },
+        defaultStyles.base,
         titleStyle,
         !!color && { color },
       ])}
@@ -104,3 +104,12 @@ export function Title(props: SubComponentProps) {
     </View>
   );
 }
+
+export const defaultStyles = {
+  base: {
+    get color() {
+      return theme.colors.TEXT;
+    },
+    fontSize: theme.fontSizes.BODY,
+  },
+};

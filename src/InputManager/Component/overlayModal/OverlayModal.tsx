@@ -1,25 +1,38 @@
 import React from 'react';
-import { Animated, Modal, StyleSheet, View } from 'react-native';
+import { Animated, Platform, StyleSheet, View } from 'react-native';
 
 import { Pressable } from '@huds0n/components';
-import { Core } from '@huds0n/core';
+import { useIsDarkMode } from '@huds0n/theming';
+import { theme } from '@huds0n/theming/src/theme';
 import { addColorTransparency } from '@huds0n/utilities';
 
-import { OverlayModalController } from './helpers';
+import * as InputState from '../../../state';
+import * as Types from '../../../types';
 
-export const OverlayModal = () => {
-  const [{ customInputComponent }] = OverlayModalController.useState(
-    'customInputComponent',
-  );
+import { inputOpacityAnim } from './helpers';
 
-  Core.useState('darkMode');
+export const OverlayModal = ({ inputColors }: Types.InputManagerProps) => {
+  const customInput = InputState.useCustomInput();
+  const isDark = useIsDarkMode();
 
-  const { backgroundColor, contentsColor } = Core.getInputColors();
+  if (!customInput?.Component) return null;
+
+  const { Component, props: componentProps } = customInput;
+
+  const backgroundColor =
+    inputColors?.background || isDark ? theme.colors.BLACK : theme.colors.WHITE;
+
+  const contentsColor =
+    inputColors?.contents || isDark ? theme.colors.WHITE : theme.colors.BLACK;
 
   const customInputStyle = {
-    flex: 1,
-    opacity: OverlayModalController.inputOpacityAnim,
+    height: '100%',
+    width: '100%',
+    opacity: inputOpacityAnim,
   };
+
+  const { Modal } =
+    Platform.OS === 'web' ? require('./WebModal') : require('react-native');
 
   return (
     <Modal
@@ -27,32 +40,31 @@ export const OverlayModal = () => {
       transparent={true}
       // @ts-ignore
       statusBarTranslucent
-      visible={!!customInputComponent}
+      onRequestClose={InputState.dismissInput}
+      visible
     >
       <Animated.View style={customInputStyle}>
         <Pressable
-          onPress={OverlayModalController.dismissInput}
+          onPressIn={InputState.dismissInput}
           style={{
             flex: 1,
             flexDirection: 'row',
             justifyContent: 'center',
             alignItems: 'center',
-            backgroundColor: addColorTransparency(Core.colors.BLACK, 0.25),
+            backgroundColor: addColorTransparency(theme.colors.BLACK, 0.5),
           }}
         >
-          {customInputComponent && (
-            <View
-              style={{
-                backgroundColor,
-                borderColor: contentsColor,
-                borderWidth: StyleSheet.hairlineWidth,
-                maxHeight: '75%',
-                maxWidth: '75%',
-              }}
-            >
-              {customInputComponent}
-            </View>
-          )}
+          <View
+            style={{
+              backgroundColor,
+              borderColor: contentsColor,
+              borderWidth: StyleSheet.hairlineWidth,
+              maxHeight: '75%',
+              maxWidth: '75%',
+            }}
+          >
+            <Component {...componentProps} />
+          </View>
         </Pressable>
       </Animated.View>
     </Modal>

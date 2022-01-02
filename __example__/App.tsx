@@ -1,7 +1,7 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
-import { Button, ScrollView, View } from '@huds0n/components';
+import { Button, ScrollView } from '@huds0n/components';
 import {
   DateTimeField,
   PickerField,

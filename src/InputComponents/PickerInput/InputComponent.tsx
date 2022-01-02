@@ -1,55 +1,58 @@
-import React from 'react';
+import React from "react";
 import {
   Dimensions,
-  Picker,
   Platform,
   ScrollView,
   StyleSheet,
   Text,
   View,
-} from 'react-native';
+} from "react-native";
+import { Picker } from "@react-native-picker/picker";
 
-import { Pressable } from '@huds0n/components';
-import { Core } from '@huds0n/core';
-import { useCallback, useMemo } from '@huds0n/utilities';
+import { Pressable } from "@huds0n/components";
+import { useIsDarkMode } from "@huds0n/theming";
+import { theme } from "@huds0n/theming/src/theme";
+import { useCallback, useMemo } from "@huds0n/utilities";
 
-import { InputManager } from '../../InputManager';
-import { ItemProps, SubComponent } from './types';
+import { InputManager } from "../../InputManager";
+import { ItemProps, SubComponent } from "./types";
 
 export function InputComponent<ItemT = any>({
   onValueChange,
   nullable = true,
   nullPlaceholderStyle,
-  nullLabel = '- Please Select -',
+  nullLabel = "- Please Select -",
   pickerItems,
   style,
   value,
+  onBlur,
+  onFocus,
   ...rest
 }: SubComponent<ItemT>) {
-  Core.useState('darkMode');
+  const isDark = useIsDarkMode();
 
-  const { contentsColor } = Core.getInputColors();
+  const contentsColor = isDark ? theme.colors.WHITE : theme.colors.BLACK;
 
   const _pickerItems = useMemo(
-    (): ItemProps<ItemT>[] =>
+    (): ItemProps<ItemT | null>[] =>
       nullable
         ? [
             {
-              color: nullPlaceholderStyle?.color || 'gray',
-              label: nullLabel || '',
+              color: (nullPlaceholderStyle?.color as string) || "gray",
+              label: nullLabel || "",
               value: null,
-            } as ItemProps<ItemT>,
+            },
             ...pickerItems,
           ]
         : pickerItems,
-    [nullable, nullPlaceholderStyle?.color, nullLabel, pickerItems],
+    [nullable, nullPlaceholderStyle?.color, nullLabel, pickerItems]
   );
 
-  if (Platform.OS === 'ios') {
+  if (Platform.OS === "ios") {
     const PickerItems = useMemo(() => {
       return _pickerItems.map((pickerItem) => (
         <Picker.Item
-          key={pickerItem.label || '_NULL_'}
+          key={pickerItem.label || "_NULL_"}
           {...pickerItem}
           color={pickerItem.color || contentsColor}
         />
@@ -59,7 +62,7 @@ export function InputComponent<ItemT = any>({
     return (
       <View
         style={StyleSheet.flatten([
-          { maxHeight: Dimensions.get('window').height },
+          { maxHeight: Dimensions.get("window").height },
         ])}
       >
         <Picker selectedValue={value} onValueChange={onValueChange} {...rest}>
@@ -74,7 +77,7 @@ export function InputComponent<ItemT = any>({
       <Pressable
         feedback="fade"
         key={index.toString()}
-        style={{ padding: Core.spacings.M }}
+        style={{ padding: theme.spacings.M }}
         onPress={() => {
           onValueChange(item.value);
           InputManager.dismiss();
@@ -83,25 +86,15 @@ export function InputComponent<ItemT = any>({
         <Text
           style={{
             color: item.color || contentsColor,
-            fontSize: Core.fontSizes.LABEL,
+            fontSize: theme.fontSizes.LABEL,
           }}
         >
           {item.label}
         </Text>
       </Pressable>
     ),
-    [onValueChange, contentsColor],
+    [onValueChange, contentsColor]
   );
 
-  return (
-    <View
-      style={{
-        flexDirection: 'row',
-        minWidth: Core.dimensions.INPUT_WIDTH / 2,
-        maxWidth: Core.dimensions.INPUT_WIDTH,
-      }}
-    >
-      <ScrollView>{_pickerItems.map(renderItem)}</ScrollView>
-    </View>
-  );
+  return <ScrollView>{_pickerItems.map(renderItem)}</ScrollView>;
 }

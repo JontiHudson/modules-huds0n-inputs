@@ -2,22 +2,16 @@ import React from 'react';
 import { Dimensions, View } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-import { Core } from '@huds0n/core';
+import { useIsDarkMode } from '@huds0n/theming';
 import { useCallback, useEffect } from '@huds0n/utilities';
 
 import * as Types from './types';
 
 export const InputComponentIOS: Types.SubComponent = (props) => {
-  const {
-    isFocused,
-    minimumDate,
-    maximumDate,
-    mode,
-    onValueChange,
-    value,
-  } = props;
+  const { isFocused, minimumDate, maximumDate, mode, onValueChange, value } =
+    props;
 
-  Core.useState('darkMode');
+  useIsDarkMode();
 
   const handleChange = useCallback(
     (event: any, value?: Date) => {

@@ -1,51 +1,53 @@
 import React, { useRef } from 'react';
 import { Animated, Dimensions, View } from 'react-native';
 
-import { Core } from '@huds0n/core';
+import { useIsDarkMode } from '@huds0n/theming';
+import { theme } from '@huds0n/theming/src/theme';
 import { ScreenManager } from '@huds0n/screen-manager';
 import { useEffect } from '@huds0n/utilities';
 
 import { AccessoryView } from '../../../InputAccessoryViewIOS/AccessoryView';
-import * as Types from '../../types';
-import { SlideModalController } from './helpers';
+import * as InputState from '../../../state';
+import * as Types from '../../../types';
+import { inputYAnim, handleCustomInputChange } from './helpers';
 
 export const SlideModal = (props: Types.InputManagerProps) => {
-  const [{ customInputComponent }] = SlideModalController.useState(
-    'customInputComponent',
-  );
-  const {
-    deviceWidth,
-    screenMarginLeft,
-    screenMarginRight,
-  } = ScreenManager.useDimensions();
+  const currentInput = InputState.useCustomInput();
 
-  Core.useState('darkMode');
+  const { deviceWidth, screenMarginLeft, screenMarginRight } =
+    ScreenManager.useDimensions();
+
+  useIsDarkMode();
 
   const wrapperRef = useRef<View>(null);
 
   useEffect(
     () => {
-      if (customInputComponent) {
+      if (currentInput) {
         wrapperRef.current?.measure((x, y, width, height) => {
-          SlideModalController.handleCustomInputChange(height);
+          handleCustomInputChange(height);
         });
       }
     },
-    [customInputComponent],
+    [currentInput],
     { layout: 'END' },
   );
 
-  const { keyboardColor } = Core.getInputColors();
+  if (!currentInput) return null;
+
+  const { Component, props: componentProps } = currentInput;
+
+  const keyboardColor = theme.colors.KEYBOARD;
 
   const customInputStyle = {
     flex: 1,
-    transform: [{ translateY: SlideModalController.inputYAnim }],
+    transform: [{ translateY: inputYAnim }],
   };
 
   return (
     <View style={{ position: 'absolute', top: '100%' }}>
       <Animated.View style={customInputStyle}>
-        {customInputComponent && (
+        {Component && (
           <View
             ref={wrapperRef}
             style={{
@@ -58,7 +60,7 @@ export const SlideModal = (props: Types.InputManagerProps) => {
           >
             <AccessoryView {...props} />
             <View style={{ backgroundColor: keyboardColor }}>
-              {customInputComponent}
+              <Component {...componentProps} />
             </View>
           </View>
         )}

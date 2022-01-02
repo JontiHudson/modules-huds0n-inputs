@@ -45,10 +45,10 @@ export function handleValueValidation<T = any>(props: CommonInputProps<T>) {
   const _onValueChange = useCallback(
     (newValue: T) => {
       const newError = handleValidation(props, newValue);
-      setError(newError);
-      onValueChange && onValueChange?.(newValue, newError);
+      setError(newError || customError);
+      onValueChange && onValueChange?.(newValue, newError || customError);
     },
-    [onValueChange],
+    [onValueChange, customError],
   );
 
   return { error, onValueChange: _onValueChange };

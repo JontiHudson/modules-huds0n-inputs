@@ -1,70 +1,66 @@
 import React from 'react';
-import {
-  findNodeHandle,
-  Platform,
-  TextInput as TextInputRN,
-} from 'react-native';
+import { Platform, TextInput as TextInputRN } from 'react-native';
 
-import { getNodeId, useEffect, useMemo } from '@huds0n/utilities';
+import { getNodeId, useEffect } from '@huds0n/utilities';
+import { theme } from '@huds0n/theming/src/theme';
 
+import * as InputState from '../../state';
 import { Validation } from '../../types';
 import { Props } from './types';
 
-const InputController =
-  Platform.OS === 'ios'
-    ? require('../../InputManager/Component/slideModal/helpers')
-        .SlideModalController
-    : require('../../InputManager/Component/overlayModal/helpers')
-        .OverlayModalController;
+export function getSubmitPress(props: Props, error: Validation.Error) {
+  const { onSubmitEditing, value } = props;
 
-export function handleInputAccessoryView(
-  props: Props,
-  ref: React.RefObject<TextInputRN>,
-  error: Validation.Error,
-) {
-  const { downPress, onSubmitEditing, upPress, value } = props;
-
-  const textInputId = getNodeId(ref);
-
-  const focusedNodeId = InputController.useFocusedNodeId();
-  const isFocused = textInputId === focusedNodeId;
-
-  const submitPress = useMemo(() => {
-    if (!error && onSubmitEditing) {
-      return () => {
-        onSubmitEditing(value, error);
-      };
-    }
-    return undefined;
-  }, [error, onSubmitEditing, value]);
-
-  useEffect(() => {
-    if (isFocused) {
-      const { InputAccessoryState } = require('../../InputAccessoryViewIOS');
-
-      InputAccessoryState.setState({
-        upPress,
-        submitPress,
-        downPress,
-      });
-    }
-  }, [isFocused, downPress, upPress, submitPress]);
+  if (!error && onSubmitEditing) {
+    return () => {
+      onSubmitEditing(value, error);
+    };
+  }
+  return undefined;
 }
 
 export function handleAndroidBlurOnKeyboardHide(
   ref: React.RefObject<TextInputRN>,
 ) {
-  const textInputId = getNodeId(ref);
+  if (Platform.OS === 'android') {
+    const textInputId = getNodeId(ref.current, true);
+    const focusedInput = InputState.useFocusedInput();
 
-  const focusedNodeId = InputController.useFocusedNodeId();
-  const isFocused = textInputId === focusedNodeId;
-
-  useEffect(() => {
-    if (
-      !isFocused &&
-      textInputId === findNodeHandle(TextInputRN.State.currentlyFocusedInput())
-    ) {
-      ref.current?.blur();
-    }
-  }, [isFocused]);
+    useEffect(
+      () => {
+        if (
+          !focusedInput &&
+          textInputId ===
+            getNodeId(TextInputRN.State.currentlyFocusedInput(), true)
+        ) {
+          ref.current?.blur();
+        }
+      },
+      [focusedInput],
+      { layout: 'BEFORE' },
+    );
+  }
 }
+
+export const defaultStyles = {
+  base: {
+    get color() {
+      return theme.colors.TEXT;
+    },
+    paddingTop: 0,
+    fontSize: theme.fontSizes.BODY,
+    ...(Platform.OS === 'web' && {
+      outlineStyle: 'none',
+    }),
+  },
+  disabled: {
+    get color() {
+      return theme.colors.DISABLED;
+    },
+  },
+  error: {
+    get color() {
+      return theme.colors.ERROR;
+    },
+  },
+};

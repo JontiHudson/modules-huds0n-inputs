@@ -1,12 +1,12 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { Core } from '@huds0n/core';
+import { theme } from '@huds0n/theming/src/theme';
 
 import { Children } from './Children';
 import { Message } from './Message';
 import { Title } from './Title';
-import { theming } from './theming';
+
 import * as Types from './types';
 
 export namespace InputField {
@@ -14,18 +14,16 @@ export namespace InputField {
   export type Props = Types.Props;
   export type ValidationError = Types.Props['error'];
 
-  export type Component = React.FunctionComponent<Props> & {
-    theming: typeof theming;
-  };
+  export type Component = React.FunctionComponent<Props>;
 }
 
-const _InputField = (props: Types.Props) => {
+export const InputField = (props: Types.Props) => {
   const {
-    borderColor,
+    borderColor = theme.colors.BORDER,
     containerStyle,
     contentsStyle,
     error,
-    errorColor = Core.colors.ERROR,
+    errorColor = theme.colors.ERROR,
     isEmpty,
     isFocused,
   } = props;
@@ -43,8 +41,10 @@ const _InputField = (props: Types.Props) => {
     <View
       style={StyleSheet.flatten([
         {
-          paddingBottom: Core.spacings.S,
-          paddingTop: Core.spacings.M,
+          paddingBottom: theme.spacings.S,
+          paddingTop: theme.spacings.M,
+          maxWidth: theme.dimensions.INPUT_WIDTH,
+          width: '100%',
         },
         containerStyle,
       ])}
@@ -53,7 +53,7 @@ const _InputField = (props: Types.Props) => {
         style={StyleSheet.flatten([
           {
             borderBottomWidth: 1,
-            padding: Core.spacings.XS,
+            padding: theme.spacings.XS,
           },
           contentsStyle,
           { borderColor: overrideColor || borderColor },
@@ -68,5 +68,3 @@ const _InputField = (props: Types.Props) => {
     </View>
   );
 };
-
-export const InputField = Object.assign(_InputField, { theming });

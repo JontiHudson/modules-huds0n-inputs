@@ -1,35 +1,36 @@
 import React from 'react';
-import { StyleSheet, Text, TextStyle } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 
-import { Core } from '@huds0n/core';
-
+import { defaultStyles } from './helpers';
 import { SubComponent } from './types';
 
 export function OutputComponent<ItemT = any>({
   disabled,
-  disabledPlaceholderStyle = { color: Core.colors.DISABLED },
+  disabledPlaceholderStyle,
   error,
-  errorPlaceholderStyle = { color: Core.colors.ERROR },
-  nullPlaceholderStyle = { color: 'gray' },
+  errorPlaceholderStyle,
+  nullPlaceholderStyle,
   nullLabel = '- Please Select -',
   placeholderStyle,
   pickerItems,
   value,
 }: SubComponent<ItemT>) {
   const currentItem = pickerItems.find((item) => item.value === value);
+  const isNull = value === null;
 
   return (
     <Text
-      style={
-        StyleSheet.flatten([
-          { color: Core.colors.TEXT, fontSize: Core.fontSizes.BODY },
-          placeholderStyle,
-          currentItem?.color && { color: currentItem?.color },
-          value === null && nullPlaceholderStyle,
-          !!error && errorPlaceholderStyle,
-          disabled && disabledPlaceholderStyle,
-        ]) as TextStyle
-      }
+      style={StyleSheet.flatten([
+        defaultStyles.base,
+        placeholderStyle,
+        !!currentItem?.color && { color: currentItem?.color },
+        isNull && defaultStyles.null,
+        isNull && nullPlaceholderStyle,
+        !!error && defaultStyles.error,
+        !!error && errorPlaceholderStyle,
+        disabled && defaultStyles.disabled,
+        disabled && disabledPlaceholderStyle,
+      ])}
     >
       {currentItem?.placeholder || currentItem?.label || nullLabel}
     </Text>

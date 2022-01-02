@@ -14,9 +14,6 @@ const MULTILINE_TEXT_VALIDATION_REGEX = RegExp(
   '^[A-Za-zÀ-ÖØ-öø-ÿ0-9 \n~`!@#£€$%^&*(){}\\[\\];:"\'’<,.>?\\/|_+=\\\\-]*$',
 );
 
-const PASSWORD_VALIDATION_REGEX = RegExp(
-  '^^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})',
-);
 const PHONE_VALIDATION_REGEX = RegExp('^(0)([0-9]){9,10}$');
 const POSTCODE_VALIDATION_REGEX = RegExp(
   '^(GIR ?0AA|[A-PR-UWYZ]([0-9]{1,2}|([A-HK-Y][0-9]([0-9ABEHMNPRV-Y])?)|[0-9][A-HJKPS-UW]) ?[0-9][ABD-HJLNP-UW-Z]{2})$',
@@ -53,11 +50,6 @@ const validateTextOnly = validateRegex(TEXT_VALIDATION_REGEX, 'Invalid text');
 const validateMultilineText = validateRegex(
   MULTILINE_TEXT_VALIDATION_REGEX,
   'Invalid text',
-);
-
-const validatePassword = validateRegex(
-  PASSWORD_VALIDATION_REGEX,
-  'Invalid password',
 );
 
 const validatePhone = validateRegex(
@@ -152,12 +144,18 @@ function validateDate({
   isPast,
   before,
   after,
+  beforeOrEqual,
+  afterOrEqual,
+  type = 'date',
 }: {
   canBeToday?: boolean;
   isFuture?: boolean;
   isPast?: boolean;
   before?: Date;
   after?: Date;
+  beforeOrEqual?: Date;
+  afterOrEqual?: Date;
+  type?: 'date' | 'time' | 'dateTime';
 }): Validation.Function<Date | null> {
   return (date) => {
     if (!date) {
@@ -189,11 +187,43 @@ function validateDate({
     }
 
     if (before && time > new Date(before).valueOf()) {
-      return `Needs to be before ${before.toLocaleDateString()}`;
+      return `Needs to be before ${
+        type === 'date'
+          ? before.toLocaleDateString()
+          : type === 'time'
+          ? before.toLocaleTimeString()
+          : before.toLocaleString()
+      }`;
     }
 
     if (after && time < new Date(after).valueOf()) {
-      return `Needs to be after ${after.toLocaleDateString()}`;
+      return `Needs to be after ${
+        type === 'date'
+          ? after.toLocaleDateString()
+          : type === 'time'
+          ? after.toLocaleTimeString()
+          : after.toLocaleString()
+      }`;
+    }
+
+    if (beforeOrEqual && time > new Date(beforeOrEqual).valueOf()) {
+      return `Needs to be on or before ${
+        type === 'date'
+          ? beforeOrEqual.toLocaleDateString()
+          : type === 'time'
+          ? beforeOrEqual.toLocaleTimeString()
+          : beforeOrEqual.toLocaleString()
+      }`;
+    }
+
+    if (afterOrEqual && time < new Date(afterOrEqual).valueOf()) {
+      return `Needs to be on or after ${
+        type === 'date'
+          ? afterOrEqual.toLocaleDateString()
+          : type === 'time'
+          ? afterOrEqual.toLocaleTimeString()
+          : afterOrEqual.toLocaleString()
+      }`;
     }
 
     return false;
@@ -209,7 +239,6 @@ export const validators = {
   multiLineText: validateMultilineText,
   name: validateName,
   number: validateNumber,
-  password: validatePassword,
   phone: validatePhone,
   postcode: validatePostcode,
   regex: validateRegex,

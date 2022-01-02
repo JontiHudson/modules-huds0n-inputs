@@ -1,13 +1,13 @@
 import React from 'react';
 import { StyleSheet, View, ScaleYTransform } from 'react-native';
 
-import { Core } from '@huds0n/core';
+import { useIsDarkMode } from '@huds0n/theming';
+import { theme } from '@huds0n/theming/src/theme';
 import { useCallback } from '@huds0n/utilities';
 import { Icon } from '@huds0n/components';
 
-import { SlideModalController } from '../InputManager/Component/slideModal/helpers';
-import * as Types from '../InputManager/types';
-import { InputAccessoryState } from './helpers';
+import * as InputState from '../state';
+import * as Types from '../types';
 
 export const Contents = React.memo(
   ({
@@ -17,22 +17,24 @@ export const Contents = React.memo(
       iconSubmit = defaultIcons.submit,
       iconUp = defaultIcons.up,
     } = {},
+    inputColors,
   }: Types.InputManagerProps) => {
-    Core.useState('darkMode');
+    const isDark = useIsDarkMode();
 
-    const { keyboardColor, contentsColor } = Core.getInputColors();
+    const keyboardColor = theme.colors.KEYBOARD;
+    const contentsColor =
+      inputColors?.contents || isDark ? theme.colors.WHITE : theme.colors.BLACK;
 
-    const [{ downPress, submitPress, upPress }] = InputAccessoryState.useState([
-      'downPress',
-      'submitPress',
-      'upPress',
-    ]);
+    // Recent input is used so appearance of accessory view remains constants during closing when focusedInput is set to null
+    const { downPress, submitPress, upPress } = InputState.useAccessoryView();
 
-    const handleDownPress = useCallback(() => downPress && downPress(), [
-      downPress,
-    ]);
+    const handleDownPress = useCallback(
+      () => downPress && downPress(),
+      [downPress],
+    );
+
     const handleSubmitPress = useCallback(() => {
-      SlideModalController.dismissInput();
+      InputState.dismissInput();
       submitPress && submitPress();
     }, [submitPress]);
     const handleUpPress = useCallback(() => upPress && upPress(), [upPress]);
@@ -62,8 +64,8 @@ export const Contents = React.memo(
           borderColor: contentsColor,
           borderTopWidth: StyleSheet.hairlineWidth,
           flexDirection: 'row',
-          paddingHorizontal: Core.spacings.M,
-          paddingVertical: Core.spacings.S,
+          paddingHorizontal: theme.spacings.M,
+          paddingVertical: theme.spacings.S,
           width: '100%',
         }}
       >
@@ -78,7 +80,7 @@ export const Contents = React.memo(
         <View style={{ flex: 1 }} />
         <Icon
           color={contentsColor}
-          onPress={SlideModalController.dismissInput}
+          onPress={InputState.dismissInput}
           {...iconDismiss}
         />
       </View>

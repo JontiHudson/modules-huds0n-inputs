@@ -1,12 +1,12 @@
 import { Platform } from 'react-native';
 
+import { DateTimeWeb } from './ComponentWeb';
 import { createCustomInput } from '../CustomInput';
 import { InputComponentIOS } from './InputComponentIOS';
 import { OutputComponent } from './OutputComponent';
 
 import { Validation } from '../../types';
 
-import { theming } from './theming';
 import * as Types from './types';
 
 export namespace DateTimeInput {
@@ -23,13 +23,13 @@ export namespace DateTimeInput {
 
   export type Component = React.ForwardRefExoticComponent<
     Props & React.RefAttributes<RefType>
-  > & { theming: typeof theming };
+  >;
 }
 
-export const DateTimeInput: DateTimeInput.Component = Object.assign(
-  createCustomInput(
-    OutputComponent,
-    Platform.OS === 'ios' ? InputComponentIOS : undefined,
-  ),
-  { theming },
-);
+export const DateTimeInput: DateTimeInput.Component =
+  Platform.OS === 'web'
+    ? DateTimeWeb
+    : createCustomInput(
+        OutputComponent,
+        Platform.OS === 'ios' ? InputComponentIOS : undefined,
+      );
