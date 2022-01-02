@@ -1,6 +1,6 @@
 {
   "name": "@huds0n/inputs",
-  "version": "1.6.0-beta13",
+  "version": "1.6.0-beta26",
   "description": "Enhanced React Native Inputs with field wrapper component, hooks, input modal, and improved InputAwareView",
   "main": "./index.js",
   "types": "./index.d.ts",
@@ -20,11 +20,11 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@huds0n/animations": "1.6.0-beta13",
-    "@huds0n/components": "1.6.0-beta13",
-    "@huds0n/theming": "1.6.0-beta13",
-    "@huds0n/shared-state": "1.6.0-beta13",
-    "@huds0n/utilities": "1.6.0-beta13",
+    "@huds0n/animations": "1.6.0-beta26",
+    "@huds0n/components": "1.6.0-beta26",
+    "@huds0n/theming": "1.6.0-beta26",
+    "@huds0n/shared-state": "1.6.0-beta26",
+    "@huds0n/utilities": "1.6.0-beta26",
     "@react-native-community/datetimepicker": "4.0.0",
     "@react-native-picker/picker": "2.2.1"
   },
@@ -33,6 +33,9 @@
     "@types/react-native": "^0.66.11",
     "@types/tinycolor2": "^1.4.3",
     "typescript": "^4.5.4"
+  },
+  "optionalDependencies": {
+    "react-dom": "17.0.1"
   },
   "publishConfig": {
     "access": "public"
