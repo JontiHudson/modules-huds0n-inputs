@@ -1,7 +1,7 @@
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import React from "react";
+import { StyleSheet, View } from "react-native";
 
-import { Button, ScrollView } from '@huds0n/components';
+import { Button, ScrollView } from "@huds0n/components";
 import {
   DateTimeField,
   PickerField,
@@ -12,8 +12,8 @@ import {
   useForm,
   useTextInput,
   validators,
-} from '@huds0n/inputs';
-import { ScreenManager } from '@huds0n/screen-manager';
+} from "@huds0n/inputs";
+import { ScreenManager } from "@huds0n/screen-manager";
 
 export default function InputsPlayground() {
   const name = useTextInput();
@@ -23,7 +23,7 @@ export default function InputsPlayground() {
   const { isModified, revertAll, validChanges, valueArray } = useForm(
     name,
     gender,
-    dob,
+    dob
   );
 
   const submit = () => {
@@ -41,7 +41,6 @@ export default function InputsPlayground() {
     >
       <InputManager>
         <ScrollView
-          fade={{ bottom: true }}
           contentContainerStyle={styles.scrollViewContainer}
           style={styles.scrollView}
         >
@@ -58,8 +57,8 @@ export default function InputsPlayground() {
             titleHighlightColor={colors.BLUE}
             title="Gender"
             pickerItems={[
-              { label: 'Male', value: 0 },
-              { label: 'Female', value: 1 },
+              { label: "Male", value: 0 },
+              { label: "Female", value: 1 },
             ]}
           />
           <DateTimeField
@@ -101,11 +100,11 @@ export default function InputsPlayground() {
 }
 
 const colors = {
-  BLACK: 'black',
-  BLUE: '#468499',
-  DARK_GREY: '#333333',
-  RED: '#990000',
-  WHITE: 'white',
+  BLACK: "black",
+  BLUE: "#468499",
+  DARK_GREY: "#333333",
+  RED: "#990000",
+  WHITE: "white",
 };
 
 const styles = StyleSheet.create({
@@ -138,17 +137,18 @@ const styles = StyleSheet.create({
     color: colors.RED,
   },
   footer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    flexDirection: "row",
+    justifyContent: "space-around",
     marginTop: 20,
-    width: '100%',
+    width: "100%",
   },
   scrollView: {
-    height: '100%',
-    width: '100%',
-    justifyContent: 'flex-end',
+    height: "100%",
+    width: "100%",
   },
   scrollViewContainer: {
     padding: 40,
+    justifyContent: "flex-end",
+    alignItems: "center",
   },
 });
