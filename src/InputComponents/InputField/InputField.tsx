@@ -13,8 +13,6 @@ const { colors, dimensions, fontSizes, spacings } = theme;
 
 const ANIMATION_DURATION = 300;
 const TITLE_ANIMATE_SCALE = 0.7;
-const TITLE_ANIMATE_LEFT =
-  dimensions.INPUT_WIDTH * (1 - TITLE_ANIMATE_SCALE) * 0.5;
 
 export function InputField(props: Types.InputFieldProps) {
   return (
@@ -61,7 +59,10 @@ export function InputField(props: Types.InputFieldProps) {
           opacity: 1,
           transform: [
             { translateY: -34 },
-            { translateX: -TITLE_ANIMATE_LEFT },
+            {
+              translateX:
+                -dimensions.INPUT_WIDTH * (1 - TITLE_ANIMATE_SCALE) * 0.5,
+            },
             { scale: TITLE_ANIMATE_SCALE },
           ],
         },
@@ -69,7 +70,10 @@ export function InputField(props: Types.InputFieldProps) {
           opacity: 1,
           transform: [
             { translateY: -34 },
-            { translateX: -TITLE_ANIMATE_LEFT },
+            {
+              translateX:
+                -dimensions.INPUT_WIDTH * (1 - TITLE_ANIMATE_SCALE) * 0.5,
+            },
             { scale: TITLE_ANIMATE_SCALE },
           ],
         },
