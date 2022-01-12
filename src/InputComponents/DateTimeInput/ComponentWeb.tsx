@@ -324,7 +324,7 @@ function getDateFormat(
 }
 
 function handleFocusBlur(
-  { onBlur, onFocus, value }: Types.DatePickerProps,
+  { onBlur, onFocus, setIsFocused, value }: Types.DatePickerProps,
   ref: React.RefObject<TextInputRN>,
   dateError: Types.ValidationError,
   setText: Function
@@ -340,6 +340,7 @@ function handleFocusBlur(
         setText("");
         onBlur && onBlur(value, dateError);
       }
+      setIsFocused?.(isFocused);
     },
     [isFocused],
     { skipMounts: true }
