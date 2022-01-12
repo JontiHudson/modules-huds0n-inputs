@@ -1,20 +1,20 @@
-import React from 'react';
-import { StyleSheet, Text } from 'react-native';
+import React from "react";
+import { StyleSheet, Text } from "react-native";
 
-import { defaultStyles } from './helpers';
-import { SubComponent } from './types';
+import { defaultStyles } from "./helpers";
+import type { Types } from "../../types";
 
-export function OutputComponent<ItemT = any>({
+export function OutputComponent<T = any>({
   disabled,
   disabledPlaceholderStyle,
   error,
   errorPlaceholderStyle,
   nullPlaceholderStyle,
-  nullLabel = '- Please Select -',
+  nullLabel = "- Please Select -",
   placeholderStyle,
   pickerItems,
   value,
-}: SubComponent<ItemT>) {
+}: Types.CustomInputSubComponentProps<T, Types.PickerSpecficProps<T>>) {
   const currentItem = pickerItems.find((item) => item.value === value);
   const isNull = value === null;
 

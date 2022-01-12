@@ -1,74 +1,54 @@
 /* eslint-disable no-useless-escape */
 
-import { Validation } from '../types';
+import type { Types } from "../types";
 
 const EMAIL_VALIDATION_REGEX = RegExp(
-  '^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$',
+  "^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$"
 );
-const MONEY_VALIDATION_REGEX = RegExp('^\\d*(\\.\\d{1,2})?$');
+const MONEY_VALIDATION_REGEX = RegExp("^\\d*(\\.\\d{1,2})?$");
 const NAME_VALIDATION_REGEX = RegExp("^[A-Za-zÀ-ÖØ-öø-ÿ0-9 '’-]*$");
 const TEXT_VALIDATION_REGEX = RegExp(
-  '^[A-Za-zÀ-ÖØ-öø-ÿ0-9 ~`!@#£€$%^&*(){}\\[\\];:"\'’<,.>?\\/|_+=\\\\-]*$',
+  "^[A-Za-zÀ-ÖØ-öø-ÿ0-9 ~`!@#£€$%^&*(){}\\[\\];:\"'’<,.>?\\/|_+=\\\\-]*$"
 );
 const MULTILINE_TEXT_VALIDATION_REGEX = RegExp(
-  '^[A-Za-zÀ-ÖØ-öø-ÿ0-9 \n~`!@#£€$%^&*(){}\\[\\];:"\'’<,.>?\\/|_+=\\\\-]*$',
-);
-
-const PHONE_VALIDATION_REGEX = RegExp('^(0)([0-9]){9,10}$');
-const POSTCODE_VALIDATION_REGEX = RegExp(
-  '^(GIR ?0AA|[A-PR-UWYZ]([0-9]{1,2}|([A-HK-Y][0-9]([0-9ABEHMNPRV-Y])?)|[0-9][A-HJKPS-UW]) ?[0-9][ABD-HJLNP-UW-Z]{2})$',
-);
-const VAT_VALIDATION_REGEX = RegExp(
-  '(GB)?([0-9]{9}([0-9]{3})?|[A-Z]{2}[0-9]{3})',
+  "^[A-Za-zÀ-ÖØ-öø-ÿ0-9 \n~`!@#£€$%^&*(){}\\[\\];:\"'’<,.>?\\/|_+=\\\\-]*$"
 );
 
 function validateRegex(
   regex: RegExp,
-  errorMessage: string,
-): Validation.Function<string> {
-  return (text = '') => {
+  errorMessage: string
+): Types.ValidationFunction<string> {
+  return (text = "") => {
     return !regex.test(text) && errorMessage;
   };
 }
 
 function validateLength(
   length: number,
-  errorMessage = 'Too short',
-): Validation.Function<string> {
-  return (text = '') => text.length < length && errorMessage;
+  errorMessage = "Too short"
+): Types.ValidationFunction<string> {
+  return (text = "") => text.length < length && errorMessage;
 }
 
 const validateEmail = validateRegex(
   EMAIL_VALIDATION_REGEX,
-  'Not an email address',
+  "Not an email address"
 );
 
-const validateMoney = validateRegex(MONEY_VALIDATION_REGEX, 'Invalid value');
+const validateMoney = validateRegex(MONEY_VALIDATION_REGEX, "Invalid value");
 
-const validateName = validateRegex(NAME_VALIDATION_REGEX, 'Invalid name');
-const validateTextOnly = validateRegex(TEXT_VALIDATION_REGEX, 'Invalid text');
+const validateName = validateRegex(NAME_VALIDATION_REGEX, "Invalid name");
+const validateTextOnly = validateRegex(TEXT_VALIDATION_REGEX, "Invalid text");
 const validateMultilineText = validateRegex(
   MULTILINE_TEXT_VALIDATION_REGEX,
-  'Invalid text',
+  "Invalid text"
 );
-
-const validatePhone = validateRegex(
-  PHONE_VALIDATION_REGEX,
-  'Not a phone number',
-);
-
-const validatePostcode = validateRegex(
-  POSTCODE_VALIDATION_REGEX,
-  'Not a postcode',
-);
-
-const validateVat = validateRegex(VAT_VALIDATION_REGEX, 'Not a VAT number');
 
 function validateCopy(
   copyString: string,
-  errorMessage: string,
-): Validation.Function<string> {
-  return (text = '') => text !== copyString && errorMessage;
+  errorMessage: string
+): Types.ValidationFunction<string> {
+  return (text = "") => text !== copyString && errorMessage;
 }
 
 function validateNumber({
@@ -83,33 +63,33 @@ function validateNumber({
   lessThan?: number;
   lessThanOrEqual?: number;
   maxDecimals?: number;
-}): Validation.Function<string> {
-  return (text = '') => {
-    if (isNaN(Number(text)) || text?.slice(-1) === '.') {
-      return 'Invalid number';
+}): Types.ValidationFunction<string> {
+  return (text = "") => {
+    if (isNaN(Number(text)) || text?.slice(-1) === ".") {
+      return "Invalid number";
     }
 
-    if (typeof lessThanOrEqual === 'number' && Number(text) > lessThanOrEqual) {
+    if (typeof lessThanOrEqual === "number" && Number(text) > lessThanOrEqual) {
       return `Must be less than or equal to ${lessThanOrEqual.toString()}`;
     }
 
     if (
-      typeof greaterThanOrEqual === 'number' &&
+      typeof greaterThanOrEqual === "number" &&
       Number(text) < greaterThanOrEqual
     ) {
       return `Must be greater than or equal to ${greaterThanOrEqual.toString()}`;
     }
 
     if ((lessThan === 0 || greaterThan === 0) && Number(text) === 0) {
-      return 'Cannot be zero';
+      return "Cannot be zero";
     }
 
     if (lessThan === 0 && Number(text) > 0) {
-      return 'Must be negative';
+      return "Must be negative";
     }
 
     if (greaterThan === 0 && Number(text) < 0) {
-      return 'Cannot be negative';
+      return "Cannot be negative";
     }
 
     if (greaterThan && Number(text) <= greaterThan) {
@@ -121,14 +101,14 @@ function validateNumber({
     }
 
     if (maxDecimals === 0 && Number(text) % 1 !== 0) {
-      return 'Cannot have decimals';
+      return "Cannot have decimals";
     }
     if (maxDecimals) {
-      const decimalPosition = text.indexOf('.');
+      const decimalPosition = text.indexOf(".");
       if (decimalPosition !== -1) {
         const decimals = text.length - decimalPosition - 1;
         if (decimals > maxDecimals) {
-          return 'Too many decimal places';
+          return "Too many decimal places";
         }
       }
     }
@@ -146,7 +126,7 @@ function validateDate({
   after,
   beforeOrEqual,
   afterOrEqual,
-  type = 'date',
+  type = "date",
 }: {
   canBeToday?: boolean;
   isFuture?: boolean;
@@ -155,8 +135,8 @@ function validateDate({
   after?: Date;
   beforeOrEqual?: Date;
   afterOrEqual?: Date;
-  type?: 'date' | 'time' | 'dateTime';
-}): Validation.Function<Date | null> {
+  type?: "date" | "time" | "dateTime";
+}): Types.ValidationFunction<Date | null> {
   return (date) => {
     if (!date) {
       return false;
@@ -175,22 +155,22 @@ function validateDate({
       canBeToday === false &&
       date.setHours(0, 0, 0, 0) === new Date().setHours(0, 0, 0, 0)
     ) {
-      return 'Cannot be today';
+      return "Cannot be today";
     }
 
     if (isFuture && time < new Date().valueOf()) {
-      return 'Needs to be in the future';
+      return "Needs to be in the future";
     }
 
     if (isPast && time >= new Date().valueOf()) {
-      return 'Needs to be in the past';
+      return "Needs to be in the past";
     }
 
     if (before && time > new Date(before).valueOf()) {
       return `Needs to be before ${
-        type === 'date'
+        type === "date"
           ? before.toLocaleDateString()
-          : type === 'time'
+          : type === "time"
           ? before.toLocaleTimeString()
           : before.toLocaleString()
       }`;
@@ -198,9 +178,9 @@ function validateDate({
 
     if (after && time < new Date(after).valueOf()) {
       return `Needs to be after ${
-        type === 'date'
+        type === "date"
           ? after.toLocaleDateString()
-          : type === 'time'
+          : type === "time"
           ? after.toLocaleTimeString()
           : after.toLocaleString()
       }`;
@@ -208,9 +188,9 @@ function validateDate({
 
     if (beforeOrEqual && time > new Date(beforeOrEqual).valueOf()) {
       return `Needs to be on or before ${
-        type === 'date'
+        type === "date"
           ? beforeOrEqual.toLocaleDateString()
-          : type === 'time'
+          : type === "time"
           ? beforeOrEqual.toLocaleTimeString()
           : beforeOrEqual.toLocaleString()
       }`;
@@ -218,9 +198,9 @@ function validateDate({
 
     if (afterOrEqual && time < new Date(afterOrEqual).valueOf()) {
       return `Needs to be on or after ${
-        type === 'date'
+        type === "date"
           ? afterOrEqual.toLocaleDateString()
-          : type === 'time'
+          : type === "time"
           ? afterOrEqual.toLocaleTimeString()
           : afterOrEqual.toLocaleString()
       }`;
@@ -239,9 +219,6 @@ export const validators = {
   multiLineText: validateMultilineText,
   name: validateName,
   number: validateNumber,
-  phone: validatePhone,
-  postcode: validatePostcode,
   regex: validateRegex,
   textOnly: validateTextOnly,
-  vat: validateVat,
 };

@@ -1,41 +1,19 @@
-import { TextInput } from 'react-native';
+import { TextInput } from "react-native";
 
-import { useCallback, useRef, useState } from '@huds0n/utilities';
+import { useCallback, useRef, useState } from "@huds0n/utilities";
 
-import { InputManager } from '../InputManager';
-import { RefType, Validation } from '../types';
+import { InputManager } from "../InputManager";
+import type { Types } from "../types";
 
-namespace Hooks {
-  export type Options<T> = {
-    defaultValue: T;
-    defaultError?: Validation.Error;
-    onErrorChange?: (error: Validation.Error) => any;
-    onValueChange?: (value: T, error: Validation.Error) => any;
-  };
-
-  export type Result<T = string, R extends RefType = RefType> = {
-    customError: Validation.Error;
-    error: Validation.Error;
-    focus: () => any;
-    isModified: boolean;
-    onErrorChange: (error: Validation.Error) => void;
-    onValueChange: (value: T, error: Validation.Error) => void;
-    ref: React.RefObject<R>;
-    revert: () => void;
-    setCustomError: (error: Validation.Error) => void;
-    setValue: (value: T) => void;
-    value: T;
-  };
-}
-
-function useInput<T, R extends RefType = RefType>(
-  options: Hooks.Options<T>,
-): Hooks.Result<T, R> {
+function useInput<T, R extends Types.InputRefType = Types.InputRefType>(
+  options: Types.UseInputProps<T>
+): Types.UseInputResult<T, R> {
   const ref = useRef<R>(null);
-  const [customError, setCustomError] = useState<Validation.Error>(
-    options.defaultError,
+  const [customError, setCustomError] = useState<Types.ValidationError>(
+    options.defaultError
   );
-  const [error, setError] = useState<Validation.Error>(undefined);
+  const [error, setError] = useState<Types.ValidationError>(undefined);
+  const [isFocused, setIsFocused] = useState(false);
   const [value, setValue] = useState(options.defaultValue);
 
   const revert = useCallback(() => {
@@ -46,74 +24,69 @@ function useInput<T, R extends RefType = RefType>(
     ref.current?.focus();
   });
 
-  const onErrorChange = useCallback((newError: Validation.Error) => {
+  const onErrorChange = useCallback((newError: Types.ValidationError) => {
     setError(newError);
     options.onErrorChange?.(newError);
   });
 
-  const onValueChange = useCallback((newValue: T, error: Validation.Error) => {
-    setValue(newValue);
-    options.onValueChange?.(newValue, error);
-  });
+  const onValueChange = useCallback(
+    (newValue: T, error: Types.ValidationError) => {
+      setValue(newValue);
+      options.onValueChange?.(newValue, error);
+    }
+  );
 
   return {
     customError,
     error,
     focus,
     isModified: value !== options.defaultValue,
+    isFocused,
     onErrorChange,
     onValueChange,
     ref,
     revert,
     setCustomError,
+    setIsFocused,
     setValue,
     value,
+    fieldProps: {
+      error,
+      focus,
+      isFocused,
+      value,
+    },
   };
 }
 
-export namespace useTextInput {
-  export type Options = Partial<Hooks.Options<string>>;
-  export type Result = Hooks.Result<string, TextInput>;
-}
-
 export function useTextInput(
-  options?: useTextInput.Options,
-): useTextInput.Result {
+  options?: Partial<Types.UseInputProps<string>>
+): Types.UseInputResult<string, TextInput> {
   return useInput({
-    defaultValue: '',
+    defaultValue: "",
     ...options,
   });
-}
-
-export namespace usePickerInput {
-  export type Options<I> = Partial<Hooks.Options<I | null>>;
-  export type Result<I> = Hooks.Result<I | null, RefType>;
 }
 
 export function usePickerInput<I>(
-  options?: usePickerInput.Options<I>,
-): usePickerInput.Result<I> {
+  options?: Partial<Types.UseInputProps<I | null>>
+): Types.UseInputResult<I | null> {
   return useInput({
     defaultValue: null,
     ...options,
   });
-}
-
-export namespace useDateTimeInput {
-  export type Options = Partial<Hooks.Options<Date | null>>;
-  export type Result = Hooks.Result<Date | null, RefType>;
 }
 
 export function useDateTimeInput(
-  options?: useDateTimeInput.Options,
-): useDateTimeInput.Result {
+  options?: Partial<Types.UseInputProps<Date | null>>
+): Types.UseInputResult<Date | null> {
   return useInput({
     defaultValue: null,
     ...options,
   });
 }
 
-export function useForm(...args: Hooks.Result<any, any>[]) {
+export function useForm(...args: Types.UseInputResult<any, any>[]) {
   args.forEach((element, i) => {
     // @ts-ignore
     if (i) element.upPress = args[i - 1]?.focus;

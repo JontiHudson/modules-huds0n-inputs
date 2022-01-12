@@ -1,8 +1,8 @@
 import { theme } from "@huds0n/theming/src/theme";
 
-import { ItemProps } from "./types";
+import type { Types } from "../../types";
 
-export const pickerItemsYN: ItemProps<boolean>[] = [
+export const pickerItemsYN: Types.PickItemProps<boolean>[] = [
   { label: "Yes", value: true },
   { label: "No", value: false },
 ];

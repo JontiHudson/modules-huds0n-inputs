@@ -1,14 +1,14 @@
-import { Animated, Easing, EmitterSubscription, Keyboard } from 'react-native';
+import { Animated, Easing, EmitterSubscription, Keyboard } from "react-native";
 
-import * as InputState from '../../../state';
+import * as InputState from "../../../state";
 
 export const inputOpacityAnim = new Animated.Value(0);
 
-Keyboard.addListener('keyboardDidHide', async () => {
+Keyboard.addListener("keyboardDidHide", async () => {
   // On android return key will hide then show keyboard when focusing the new input. THe following prevents input focus being dismissed on changing focus
   let listener: EmitterSubscription | null = null;
   const isChangeFocus = await new Promise<boolean>((resolve) => {
-    listener = Keyboard.addListener('keyboardDidShow', () => {
+    listener = Keyboard.addListener("keyboardDidShow", () => {
       resolve(true);
     });
 
@@ -24,14 +24,11 @@ Keyboard.addListener('keyboardDidHide', async () => {
   }
 });
 
-InputState.addInputListener(
-  'focusedInput',
-  async ({ focusedInput, customInput }) => {
-    if (customInput) {
-      _animateInput(focusedInput?.type === 'CUSTOM' ? 1 : 0);
-    }
-  },
-);
+InputState.addInputListener(async ({ focusedInput, customInput }) => {
+  if (customInput) {
+    _animateInput(focusedInput?.type === "CUSTOM" ? 1 : 0);
+  }
+}, "focusedInput");
 
 function _animateInput(opacity: number) {
   Animated.timing(inputOpacityAnim, {

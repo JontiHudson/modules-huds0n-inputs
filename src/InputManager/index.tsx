@@ -1,11 +1,6 @@
-import * as InputState from '../state';
-import * as Types from '../types';
+import * as InputState from "../state";
 
-import { InputManagerComponent } from './Component';
-
-export namespace InputManager {
-  export type Props = Types.InputManagerProps;
-}
+import { InputManagerComponent } from "./Component";
 
 export const InputManager = Object.assign(InputManagerComponent, {
   dismiss: InputState.dismissInput,

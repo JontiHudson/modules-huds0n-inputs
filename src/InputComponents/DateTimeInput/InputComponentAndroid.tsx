@@ -1,16 +1,21 @@
-import React from 'react';
+import React from "react";
 
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePicker from "@react-native-community/datetimepicker";
 
-import { useCallback } from '@huds0n/utilities';
+import { useCallback } from "@huds0n/utilities";
 
-import * as Types from './types';
+import type { Types } from "../../types";
 
-export const InputComponentAndroid: Types.SubComponent = (props) => {
+export function InputComponentAndroid(
+  props: Types.CustomInputSubComponentProps<
+    Date | null,
+    Types.DatePickerSpecficProps
+  >
+) {
   const {
     closeInput,
     minimumDate,
-    mode = 'date',
+    mode = "date",
     onValueChange,
     value,
   } = props;
@@ -22,29 +27,29 @@ export const InputComponentAndroid: Types.SubComponent = (props) => {
         onValueChange &&
         onValueChange(
           new Date(
-            mode === 'date'
+            mode === "date"
               ? value.setHours(0, 0, 0, 0)
-              : value.setSeconds(0, 0),
-          ),
+              : value.setSeconds(0, 0)
+          )
         );
     },
-    [mode, onValueChange, value],
+    [mode, onValueChange, value]
   );
 
   return (
     <DateTimePicker
-      display={mode === 'date' ? 'calendar' : 'spinner'}
+      display={mode === "date" ? "calendar" : "spinner"}
       {...props}
       onChange={handleChange}
       value={
         value ||
         minimumDate ||
         new Date(
-          mode === 'date'
+          mode === "date"
             ? new Date().setHours(0, 0, 0, 0)
-            : new Date().setHours(0, 0, 0, 0),
+            : new Date().setHours(0, 0, 0, 0)
         )
       }
     />
   );
-};
+}

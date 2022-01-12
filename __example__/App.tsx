@@ -3,10 +3,11 @@ import { StyleSheet, View } from "react-native";
 
 import { Button, ScrollView } from "@huds0n/components";
 import {
-  DateTimeField,
-  PickerField,
+  DateTimeInput,
+  PickerInput,
   InputManager,
-  TextField,
+  InputField,
+  TextInput,
   useDateTimeInput,
   usePickerInput,
   useForm,
@@ -44,31 +45,52 @@ export default function InputsPlayground() {
           contentContainerStyle={styles.scrollViewContainer}
           style={styles.scrollView}
         >
-          <TextField
-            {...name}
-            isRequired
-            maxLength={32}
+          <InputField
+            {...name.fieldProps}
+            icon={{ name: "user", set: "FontAwesome" }}
             title="Name"
-            titleHighlightColor={colors.BLUE}
-            validation={[validators.name, validators.length(2)]}
-          />
-          <PickerField
-            {...gender}
-            titleHighlightColor={colors.BLUE}
+          >
+            <TextInput
+              {...name}
+              isRequired
+              maxLength={32}
+              validator={[validators.name, validators.length(2)]}
+            />
+          </InputField>
+
+          <InputField
+            {...gender.fieldProps}
+            icon={
+              gender.value === null
+                ? { name: "genderless", set: "FontAwesome" }
+                : {
+                    name: gender.value === 1 ? "gender-male" : "gender-female",
+                    set: "MaterialCommunityIcons",
+                  }
+            }
             title="Gender"
-            pickerItems={[
-              { label: "Male", value: 0 },
-              { label: "Female", value: 1 },
-            ]}
-          />
-          <DateTimeField
-            {...dob}
-            isRequired
-            maximumDate={new Date()}
-            title="Date of Birth"
-            titleHighlightColor={colors.BLUE}
-            onSubmitEditing={validChanges && submit}
-          />
+          >
+            <PickerInput
+              {...gender}
+              pickerItems={[
+                { label: "Male", value: 0 },
+                { label: "Female", value: 1 },
+              ]}
+            />
+          </InputField>
+
+          <InputField
+            {...dob.fieldProps}
+            icon={{ name: "birthday-cake", set: "FontAwesome", size: 16 }}
+            title="Date Of Birth"
+          >
+            <DateTimeInput
+              {...dob}
+              isRequired
+              maximumDate={new Date()}
+              onSubmitEditing={validChanges && submit}
+            />
+          </InputField>
 
           <View style={styles.footer}>
             <Button

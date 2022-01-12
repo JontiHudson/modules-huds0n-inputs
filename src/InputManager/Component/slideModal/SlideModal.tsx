@@ -1,15 +1,15 @@
-import React, { useRef } from 'react';
-import { Animated, Dimensions, View } from 'react-native';
+import React, { useRef } from "react";
+import { Animated, Dimensions, View } from "react-native";
 
-import { useIsDarkMode } from '@huds0n/theming';
-import { theme } from '@huds0n/theming/src/theme';
-import { ScreenManager } from '@huds0n/screen-manager';
-import { useEffect } from '@huds0n/utilities';
+import { useIsDarkMode } from "@huds0n/theming";
+import { theme } from "@huds0n/theming/src/theme";
+import { ScreenManager } from "@huds0n/screen-manager";
+import { useEffect } from "@huds0n/utilities";
 
-import { AccessoryView } from '../../../InputAccessoryViewIOS/AccessoryView';
-import * as InputState from '../../../state';
-import * as Types from '../../../types';
-import { inputYAnim, handleCustomInputChange } from './helpers';
+import { AccessoryView } from "../../../InputAccessoryViewIOS/AccessoryView";
+import * as InputState from "../../../state";
+import type { Types } from "../../../types";
+import { inputYAnim, handleCustomInputChange } from "./helpers";
 
 export const SlideModal = (props: Types.InputManagerProps) => {
   const currentInput = InputState.useCustomInput();
@@ -30,7 +30,7 @@ export const SlideModal = (props: Types.InputManagerProps) => {
       }
     },
     [currentInput],
-    { layout: 'END' },
+    { layout: "END" }
   );
 
   if (!currentInput) return null;
@@ -45,7 +45,7 @@ export const SlideModal = (props: Types.InputManagerProps) => {
   };
 
   return (
-    <View style={{ position: 'absolute', top: '100%' }}>
+    <View style={{ position: "absolute", top: "100%" }}>
       <Animated.View style={customInputStyle}>
         {Component && (
           <View
@@ -67,7 +67,7 @@ export const SlideModal = (props: Types.InputManagerProps) => {
         <View
           style={{
             backgroundColor: keyboardColor,
-            height: Dimensions.get('screen').height,
+            height: Dimensions.get("screen").height,
           }}
         />
       </Animated.View>

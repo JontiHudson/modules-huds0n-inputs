@@ -5,11 +5,11 @@ import {
   Keyboard,
   TextInput,
   View,
-} from 'react-native';
+} from "react-native";
 
-import { measureNodeAsync } from '@huds0n/utilities';
+import { measureNodeAsync } from "@huds0n/utilities";
 
-import * as InputState from '../../../state';
+import * as InputState from "../../../state";
 
 const ANIMATION_DURATION = 250;
 
@@ -18,7 +18,7 @@ let _screenRef: React.RefObject<View> | null = null;
 
 export function initialise(
   focusedNodePadding: number,
-  screenRef: React.RefObject<View>,
+  screenRef: React.RefObject<View>
 ) {
   _focusedNodePadding = focusedNodePadding;
   _screenRef = screenRef;
@@ -28,7 +28,7 @@ export const inputYAnim = new Animated.Value(0);
 export const screenYAnim = new Animated.Value(0);
 let _screenYCurrent = 0;
 
-Keyboard.addListener('keyboardWillChangeFrame', async (keyboardChangeEvent) => {
+Keyboard.addListener("keyboardWillChangeFrame", async (keyboardChangeEvent) => {
   const {
     endCoordinates: { screenY },
   } = keyboardChangeEvent;
@@ -38,20 +38,20 @@ Keyboard.addListener('keyboardWillChangeFrame', async (keyboardChangeEvent) => {
   }
 });
 
-Keyboard.addListener('keyboardWillHide', () => {
-  if (!InputState.currentCustomInput()) {
-    InputState.dismissInput();
-  }
-});
+// Keyboard.addListener('keyboardDidHide', () => {
+//   if (!InputState.currentCustomInput()) {
+//     InputState.dismissInput();
+//   }
+// });
 
-InputState.addInputListener('focusedInput', ({ focusedInput }) => {
+InputState.addInputListener(({ focusedInput }) => {
   if (focusedInput === null) {
     _animateInput(0);
     _animateScreen(0);
-  } else if (focusedInput.type === 'KEYBOARD') {
+  } else if (focusedInput.type === "KEYBOARD") {
     _animateInput(0);
   }
-});
+}, "focusedInput");
 
 async function getPositionAsync(nodeId: number | string) {
   const { height, pageY } = await measureNodeAsync(nodeId);
@@ -135,7 +135,7 @@ async function _moveScreen(inputTop: number) {
 export async function handleCustomInputChange(height: number) {
   if (_screenRef) {
     const { height: screenHeight, pageY: topOffset } = await measureNodeAsync(
-      _screenRef.current,
+      _screenRef.current
     );
     _moveScreen(screenHeight + topOffset - height);
     await _animateInput(-height);

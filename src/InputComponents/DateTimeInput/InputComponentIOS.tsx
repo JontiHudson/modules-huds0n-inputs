@@ -1,13 +1,18 @@
-import React from 'react';
-import { Dimensions, View } from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import React from "react";
+import { Dimensions, View } from "react-native";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
-import { useIsDarkMode } from '@huds0n/theming';
-import { useCallback, useEffect } from '@huds0n/utilities';
+import { useIsDarkMode } from "@huds0n/theming";
+import { useCallback, useEffect } from "@huds0n/utilities";
 
-import * as Types from './types';
+import type { Types } from "../../types";
 
-export const InputComponentIOS: Types.SubComponent = (props) => {
+export function InputComponentIOS(
+  props: Types.CustomInputSubComponentProps<
+    Date | null,
+    Types.DatePickerSpecficProps
+  >
+) {
   const { isFocused, minimumDate, maximumDate, mode, onValueChange, value } =
     props;
 
@@ -19,13 +24,13 @@ export const InputComponentIOS: Types.SubComponent = (props) => {
         onValueChange &&
         onValueChange(
           new Date(
-            mode === 'date'
+            mode === "date"
               ? value.setHours(0, 0, 0, 0)
-              : value.setSeconds(0, 0),
-          ),
+              : value.setSeconds(0, 0)
+          )
         );
     },
-    [mode, onValueChange, value],
+    [mode, onValueChange, value]
   );
 
   useEffect(
@@ -35,15 +40,16 @@ export const InputComponentIOS: Types.SubComponent = (props) => {
 
         const startValue =
           minimumDate ||
+          maximumDate ||
           new Date(
-            mode === 'date' ? now.setHours(0, 0, 0, 0) : now.setSeconds(0, 0),
+            mode === "date" ? now.setHours(0, 0, 0, 0) : now.setSeconds(0, 0)
           );
 
         onValueChange(startValue);
       }
     },
     [isFocused && !value],
-    { layout: 'BEFORE' },
+    { layout: "BEFORE" }
   );
 
   useEffect(
@@ -58,11 +64,11 @@ export const InputComponentIOS: Types.SubComponent = (props) => {
       }
     },
     [minimumDate, maximumDate],
-    { skipMounts: true },
+    { skipMounts: true }
   );
 
   return (
-    <View style={{ maxHeight: Dimensions.get('window').height }}>
+    <View style={{ maxHeight: Dimensions.get("window").height }}>
       <DateTimePicker
         {...props}
         display="spinner"
@@ -71,4 +77,4 @@ export const InputComponentIOS: Types.SubComponent = (props) => {
       />
     </View>
   );
-};
+}

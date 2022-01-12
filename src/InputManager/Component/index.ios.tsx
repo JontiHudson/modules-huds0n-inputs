@@ -1,15 +1,15 @@
-import React from 'react';
-import { View } from 'react-native';
+import React from "react";
+import { View } from "react-native";
 
-import { theme } from '@huds0n/theming/src/theme';
-import { onMount, useRef } from '@huds0n/utilities';
+import { theme } from "@huds0n/theming/src/theme";
+import { onMount, useRef } from "@huds0n/utilities";
 
-import { InputAccessoryView } from '../../InputAccessoryViewIOS';
-import * as Types from '../../types';
+import { InputAccessoryView } from "../../InputAccessoryViewIOS";
+import type { Types } from "../../types";
 
-import { SlideModal } from './slideModal/SlideModal';
-import { AnimatedScreen } from './slideModal/AnimatedScreen';
-import { initialise } from './slideModal/helpers';
+import { SlideModal } from "./slideModal/SlideModal";
+import { AnimatedScreen } from "./slideModal/AnimatedScreen";
+import { initialise } from "./slideModal/helpers";
 
 export const InputManagerComponent = React.memo(
   (props: Types.InputManagerProps) => {
@@ -26,7 +26,7 @@ export const InputManagerComponent = React.memo(
         ref={screenRef}
         style={{
           flex: 1,
-          overflow: 'hidden',
+          overflow: "hidden",
         }}
       >
         <AnimatedScreen {...props} />
@@ -34,5 +34,5 @@ export const InputManagerComponent = React.memo(
         <InputAccessoryView {...props} />
       </View>
     );
-  },
+  }
 );

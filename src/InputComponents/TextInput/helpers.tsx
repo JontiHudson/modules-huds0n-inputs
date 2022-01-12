@@ -1,14 +1,16 @@
-import React from 'react';
-import { Platform, TextInput as TextInputRN } from 'react-native';
+import React from "react";
+import { Platform, TextInput as TextInputRN } from "react-native";
 
-import { getNodeId, useEffect } from '@huds0n/utilities';
-import { theme } from '@huds0n/theming/src/theme';
+import { getNodeId, useEffect } from "@huds0n/utilities";
+import { theme } from "@huds0n/theming/src/theme";
 
-import * as InputState from '../../state';
-import { Validation } from '../../types';
-import { Props } from './types';
+import * as InputState from "../../state";
+import type { Types } from "../../types";
 
-export function getSubmitPress(props: Props, error: Validation.Error) {
+export function getSubmitPress(
+  props: Types.TextInputProps,
+  error: Types.ValidationError
+) {
   const { onSubmitEditing, value } = props;
 
   if (!error && onSubmitEditing) {
@@ -20,9 +22,9 @@ export function getSubmitPress(props: Props, error: Validation.Error) {
 }
 
 export function handleAndroidBlurOnKeyboardHide(
-  ref: React.RefObject<TextInputRN>,
+  ref: React.RefObject<TextInputRN>
 ) {
-  if (Platform.OS === 'android') {
+  if (Platform.OS === "android") {
     const textInputId = getNodeId(ref.current, true);
     const focusedInput = InputState.useFocusedInput();
 
@@ -37,7 +39,7 @@ export function handleAndroidBlurOnKeyboardHide(
         }
       },
       [focusedInput],
-      { layout: 'BEFORE' },
+      { layout: "BEFORE" }
     );
   }
 }
@@ -49,8 +51,8 @@ export const defaultStyles = {
     },
     paddingTop: 0,
     fontSize: theme.fontSizes.BODY,
-    ...(Platform.OS === 'web' && {
-      outlineStyle: 'none',
+    ...(Platform.OS === "web" && {
+      outlineStyle: "none",
     }),
   },
   disabled: {

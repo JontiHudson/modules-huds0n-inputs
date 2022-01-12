@@ -1,16 +1,15 @@
-import { TextStyle, StyleSheet } from 'react-native';
+import { TextStyle, StyleSheet } from "react-native";
 
-import { Validation } from '../../types';
-import { defaultStyles } from '../PickerInput/helpers';
+import { defaultStyles } from "../PickerInput/helpers";
 
-import * as Types from './types';
+import type { Types } from "../../types";
 
 export function defaultFormatDisplayDate(
   date: Date,
   locale: string,
-  mode: Types.Mode,
+  mode: Types.DatePickerMode
 ) {
-  if (mode === 'date') {
+  if (mode === "date") {
     return date.toLocaleDateString();
   }
   return date.toLocaleTimeString();
@@ -24,8 +23,8 @@ export function getStyle(
     disabledPlaceholderStyle,
     disabled,
     value,
-  }: Types.Props,
-  error: Validation.Error,
+  }: Types.DatePickerProps,
+  error: Types.ValidationError
 ) {
   const isNull = value === null;
 
@@ -41,5 +40,5 @@ export function getStyle(
   ]) as TextStyle;
 }
 
-export const DEFAULT_LOCALE = 'en-GB';
-export const DEFAULT_MODE = 'date';
+export const DEFAULT_LOCALE = "en-GB";
+export const DEFAULT_MODE = "date";

@@ -1,9 +1,9 @@
-import React from 'react';
-import { View } from 'react-native';
+import React from "react";
+import { View } from "react-native";
 
-import * as Types from '../../types';
+import type { Types } from "../../types";
 
-import { OverlayModal } from './overlayModal/OverlayModal';
+import { OverlayModal } from "./overlayModal/OverlayModal";
 
 export const InputManagerComponent = React.memo(
   (props: Types.InputManagerProps) => {
@@ -15,5 +15,5 @@ export const InputManagerComponent = React.memo(
         <OverlayModal {...props} />
       </View>
     );
-  },
+  }
 );

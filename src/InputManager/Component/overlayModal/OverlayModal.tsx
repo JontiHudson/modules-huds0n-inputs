@@ -1,15 +1,15 @@
-import React from 'react';
-import { Animated, Platform, StyleSheet, View } from 'react-native';
+import React from "react";
+import { Animated, Platform, StyleSheet, View } from "react-native";
 
-import { Pressable } from '@huds0n/components';
-import { useIsDarkMode } from '@huds0n/theming';
-import { theme } from '@huds0n/theming/src/theme';
-import { addColorTransparency } from '@huds0n/utilities';
+import { Pressable } from "@huds0n/components";
+import { useIsDarkMode } from "@huds0n/theming";
+import { theme } from "@huds0n/theming/src/theme";
+import { addColorTransparency } from "@huds0n/utilities";
 
-import * as InputState from '../../../state';
-import * as Types from '../../../types';
+import * as InputState from "../../../state";
+import type { Types } from "../../../types";
 
-import { inputOpacityAnim } from './helpers';
+import { inputOpacityAnim } from "./helpers";
 
 export const OverlayModal = ({ inputColors }: Types.InputManagerProps) => {
   const customInput = InputState.useCustomInput();
@@ -26,13 +26,13 @@ export const OverlayModal = ({ inputColors }: Types.InputManagerProps) => {
     inputColors?.contents || isDark ? theme.colors.WHITE : theme.colors.BLACK;
 
   const customInputStyle = {
-    height: '100%',
-    width: '100%',
+    height: "100%",
+    width: "100%",
     opacity: inputOpacityAnim,
   };
 
   const { Modal } =
-    Platform.OS === 'web' ? require('./WebModal') : require('react-native');
+    Platform.OS === "web" ? require("./WebModal") : require("react-native");
 
   return (
     <Modal
@@ -48,9 +48,9 @@ export const OverlayModal = ({ inputColors }: Types.InputManagerProps) => {
           onPressIn={InputState.dismissInput}
           style={{
             flex: 1,
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
             backgroundColor: addColorTransparency(theme.colors.BLACK, 0.5),
           }}
         >
@@ -59,8 +59,8 @@ export const OverlayModal = ({ inputColors }: Types.InputManagerProps) => {
               backgroundColor,
               borderColor: contentsColor,
               borderWidth: StyleSheet.hairlineWidth,
-              maxHeight: '75%',
-              maxWidth: '75%',
+              maxHeight: "75%",
+              maxWidth: "75%",
             }}
           >
             <Component {...componentProps} />

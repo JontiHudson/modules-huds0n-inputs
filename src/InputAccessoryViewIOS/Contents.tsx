@@ -1,13 +1,13 @@
-import React from 'react';
-import { StyleSheet, View, ScaleYTransform } from 'react-native';
+import React from "react";
+import { StyleSheet, View, ScaleYTransform } from "react-native";
 
-import { useIsDarkMode } from '@huds0n/theming';
-import { theme } from '@huds0n/theming/src/theme';
-import { useCallback } from '@huds0n/utilities';
-import { Icon } from '@huds0n/components';
+import { useIsDarkMode } from "@huds0n/theming";
+import { theme } from "@huds0n/theming/src/theme";
+import { useCallback } from "@huds0n/utilities";
+import { Icon } from "@huds0n/components";
 
-import * as InputState from '../state';
-import * as Types from '../types';
+import * as InputState from "../state";
+import type { Types } from "../types";
 
 export const Contents = React.memo(
   ({
@@ -30,7 +30,7 @@ export const Contents = React.memo(
 
     const handleDownPress = useCallback(
       () => downPress && downPress(),
-      [downPress],
+      [downPress]
     );
 
     const handleSubmitPress = useCallback(() => {
@@ -59,14 +59,14 @@ export const Contents = React.memo(
     return (
       <View
         style={{
-          alignItems: 'center',
+          alignItems: "center",
           backgroundColor: keyboardColor,
           borderColor: contentsColor,
           borderTopWidth: StyleSheet.hairlineWidth,
-          flexDirection: 'row',
+          flexDirection: "row",
           paddingHorizontal: theme.spacings.M,
           paddingVertical: theme.spacings.S,
-          width: '100%',
+          width: "100%",
         }}
       >
         <Icon
@@ -85,31 +85,31 @@ export const Contents = React.memo(
         />
       </View>
     );
-  },
+  }
 );
 
 const defaultIcons = {
   dismiss: {
-    name: 'keyboard-close',
-    set: 'MaterialCommunityIcons',
+    name: "keyboard-close",
+    set: "MaterialCommunityIcons",
     size: 26,
     containerStyle: { transform: [{ scaleY: 0.8 }] as ScaleYTransform[] },
   },
   down: {
-    name: 'chevron-down',
-    set: 'Feather',
+    name: "chevron-down",
+    set: "Feather",
     size: 36,
     containerStyle: { margin: -5 },
   },
   up: {
-    name: 'chevron-up',
-    set: 'Feather',
+    name: "chevron-up",
+    set: "Feather",
     size: 36,
     containerStyle: { margin: -5 },
   },
   submit: {
-    name: 'send',
-    set: 'Feather',
+    name: "send",
+    set: "Feather",
     size: 20,
   },
 } as const;

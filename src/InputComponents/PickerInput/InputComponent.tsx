@@ -15,9 +15,9 @@ import { theme } from "@huds0n/theming/src/theme";
 import { useCallback, useMemo } from "@huds0n/utilities";
 
 import { InputManager } from "../../InputManager";
-import { ItemProps, SubComponent } from "./types";
+import type { Types } from "../../types";
 
-export function InputComponent<ItemT = any>({
+export function InputComponent<T = any>({
   onValueChange,
   nullable = true,
   nullPlaceholderStyle,
@@ -28,13 +28,13 @@ export function InputComponent<ItemT = any>({
   onBlur,
   onFocus,
   ...rest
-}: SubComponent<ItemT>) {
+}: Types.CustomInputSubComponentProps<T, Types.PickerSpecficProps<T>>) {
   const isDark = useIsDarkMode();
 
   const contentsColor = isDark ? theme.colors.WHITE : theme.colors.BLACK;
 
   const _pickerItems = useMemo(
-    (): ItemProps<ItemT | null>[] =>
+    (): Types.PickItemProps<T | null>[] =>
       nullable
         ? [
             {
@@ -96,5 +96,11 @@ export function InputComponent<ItemT = any>({
     [onValueChange, contentsColor]
   );
 
-  return <ScrollView>{_pickerItems.map(renderItem)}</ScrollView>;
+  return Platform.OS === "android" ? (
+    <View>
+      <ScrollView>{_pickerItems.map(renderItem)}</ScrollView>
+    </View>
+  ) : (
+    <ScrollView>{_pickerItems.map(renderItem)}</ScrollView>
+  );
 }
