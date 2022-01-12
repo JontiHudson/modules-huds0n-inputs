@@ -4,8 +4,8 @@ import { OutputComponent } from "./OutputComponent";
 import type { Types } from "../../types";
 
 export const PickerInput = createCustomInput<
-  unknown,
-  Types.PickerSpecficProps<unknown>
+  any,
+  Types.PickerSpecficProps<any>
 >(OutputComponent, InputComponent);
 
 export * from "./helpers";
