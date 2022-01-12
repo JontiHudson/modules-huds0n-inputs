@@ -1,3 +1,4 @@
+import React from "react";
 import { View } from "react-native";
 
 import { AnimatedView } from "@huds0n/animations";

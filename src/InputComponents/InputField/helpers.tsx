@@ -1,3 +1,4 @@
+import React from "react";
 import { Text, TextStyle, View, ViewStyle } from "react-native";
 
 import { AnimatedText, AnimatedView } from "@huds0n/animations";
