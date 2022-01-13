@@ -4,7 +4,8 @@ exports.InputWrapper = void 0;
 const tslib_1 = require("tslib");
 const react_1 = (0, tslib_1.__importStar)(require("react"));
 const helpers_1 = require("./helpers");
-function InputWrapper({ onPress, ...props }) {
+function InputWrapper(_a) {
+    var { onPress } = _a, props = (0, tslib_1.__rest)(_a, ["onPress"]);
     const { children, containerStyle, contentsContainerStyle, contentsWrapperStyle, error, message, messageContainerStyle, messageStyle, messageWrapperStyle, title, titleContainerStyle, titleStyle, } = props;
     const messageRef = (0, react_1.useRef)("");
     const messageString = typeof error === "string" ? error : message ? message : "";

@@ -9,6 +9,7 @@ const theme_1 = require("@huds0n/theming/src/theme");
 const screen_manager_1 = require("@huds0n/screen-manager");
 const Contents_1 = require("./Contents");
 exports.AccessoryView = react_1.default.memo((props) => {
+    var _a;
     const { deviceWidth, screenMarginLeft, screenMarginRight } = screen_manager_1.ScreenManager.useDimensions();
     (0, theming_1.useIsDarkMode)();
     const keyboardColor = theme_1.theme.colors.KEYBOARD;
@@ -21,7 +22,7 @@ exports.AccessoryView = react_1.default.memo((props) => {
                 paddingRight: screenMarginRight,
                 width: deviceWidth,
             },
-            props.accessoryView?.containerStyle,
+            (_a = props.accessoryView) === null || _a === void 0 ? void 0 : _a.containerStyle,
         ])}>
       <Contents_1.Contents {...props}/>
     </react_native_1.View>);

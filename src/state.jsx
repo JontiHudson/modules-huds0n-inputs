@@ -19,25 +19,19 @@ function currentCustomInput() {
 }
 exports.currentCustomInput = currentCustomInput;
 function isFocused(ref) {
+    var _a;
     return (!!ref.current &&
-        _internalState.state.focusedInput?.id === (0, utilities_1.getNodeId)(ref.current));
+        ((_a = _internalState.state.focusedInput) === null || _a === void 0 ? void 0 : _a.id) === (0, utilities_1.getNodeId)(ref.current));
 }
 exports.isFocused = isFocused;
 function focusTextInput(ref, accessoryView) {
-    _internalState.setState({
-        focusedInput: { id: (0, utilities_1.getNodeId)(ref.current), type: "KEYBOARD" },
-        ...(accessoryView && { accessoryView }),
-    });
+    _internalState.setState(Object.assign({ focusedInput: { id: (0, utilities_1.getNodeId)(ref.current), type: "KEYBOARD" } }, (accessoryView && { accessoryView })));
 }
 exports.focusTextInput = focusTextInput;
 function updateCustomInput(ref, customInput, accessoryView) {
     if (ref.current) {
         react_native_1.Keyboard.dismiss();
-        _internalState.setState({
-            focusedInput: { id: ref.current, type: "CUSTOM" },
-            customInput,
-            ...(accessoryView && { accessoryView }),
-        });
+        _internalState.setState(Object.assign({ focusedInput: { id: ref.current, type: "CUSTOM" }, customInput }, (accessoryView && { accessoryView })));
     }
 }
 exports.updateCustomInput = updateCustomInput;
@@ -64,7 +58,7 @@ function useFocusedInput() {
 exports.useFocusedInput = useFocusedInput;
 function useIsFocused(ref) {
     const focusedInput = useFocusedInput();
-    return !!ref.current && focusedInput?.id === (0, utilities_1.getNodeId)(ref.current);
+    return !!ref.current && (focusedInput === null || focusedInput === void 0 ? void 0 : focusedInput.id) === (0, utilities_1.getNodeId)(ref.current);
 }
 exports.useIsFocused = useIsFocused;
 function useCustomInput() {
@@ -81,7 +75,7 @@ _core_1.huds0nState.setState({
 });
 _internalState.addListener(({ focusedInput, customInput }) => {
     _core_1.huds0nState.setState({
-        focusedId: focusedInput?.id || null,
+        focusedId: (focusedInput === null || focusedInput === void 0 ? void 0 : focusedInput.id) || null,
         isCustomInputOpen: !!customInput,
     });
 }, ["focusedInput", "customInput"]);

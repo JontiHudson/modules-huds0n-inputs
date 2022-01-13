@@ -11,7 +11,7 @@ function OutputComponent({ disabled, disabledPlaceholderStyle, error, errorPlace
     return (<react_native_1.Text style={react_native_1.StyleSheet.flatten([
             helpers_1.defaultStyles.base,
             placeholderStyle,
-            !!currentItem?.color && { color: currentItem?.color },
+            !!(currentItem === null || currentItem === void 0 ? void 0 : currentItem.color) && { color: currentItem === null || currentItem === void 0 ? void 0 : currentItem.color },
             isNull && helpers_1.defaultStyles.null,
             isNull && nullPlaceholderStyle,
             !!error && helpers_1.defaultStyles.error,
@@ -19,7 +19,7 @@ function OutputComponent({ disabled, disabledPlaceholderStyle, error, errorPlace
             disabled && helpers_1.defaultStyles.disabled,
             disabled && disabledPlaceholderStyle,
         ])}>
-      {currentItem?.placeholder || currentItem?.label || nullLabel}
+      {(currentItem === null || currentItem === void 0 ? void 0 : currentItem.placeholder) || (currentItem === null || currentItem === void 0 ? void 0 : currentItem.label) || nullLabel}
     </react_native_1.Text>);
 }
 exports.OutputComponent = OutputComponent;

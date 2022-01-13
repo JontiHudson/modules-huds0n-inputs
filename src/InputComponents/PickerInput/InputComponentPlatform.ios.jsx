@@ -6,7 +6,8 @@ const react_1 = (0, tslib_1.__importDefault)(require("react"));
 const react_native_1 = require("react-native");
 const picker_1 = require("@react-native-picker/picker");
 const utilities_1 = require("@huds0n/utilities");
-function InputComponentPlatform({ onValueChange, style, value, onBlur, onFocus, contentsColor, pickerItemsProps, ...rest }) {
+function InputComponentPlatform(_a) {
+    var { onValueChange, style, value, onBlur, onFocus, contentsColor, pickerItemsProps } = _a, rest = (0, tslib_1.__rest)(_a, ["onValueChange", "style", "value", "onBlur", "onFocus", "contentsColor", "pickerItemsProps"]);
     const PickerItems = (0, utilities_1.useMemo)(() => {
         return pickerItemsProps.map((pickerItemProps) => (<picker_1.Picker.Item key={pickerItemProps.label || "_NULL_"} {...pickerItemProps} color={pickerItemProps.color || contentsColor}/>));
     }, [pickerItemsProps, contentsColor]);

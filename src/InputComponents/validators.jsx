@@ -24,7 +24,7 @@ function validateCopy(copyString, errorMessage) {
 }
 function validateNumber({ greaterThan, greaterThanOrEqual, lessThan, lessThanOrEqual, maxDecimals, }) {
     return (text = "") => {
-        if (isNaN(Number(text)) || text?.slice(-1) === ".") {
+        if (isNaN(Number(text)) || (text === null || text === void 0 ? void 0 : text.slice(-1)) === ".") {
             return "Invalid number";
         }
         if (typeof lessThanOrEqual === "number" && Number(text) > lessThanOrEqual) {

@@ -14,13 +14,13 @@ function InputComponent(props) {
     const pickerItemsProps = (0, utilities_1.useMemo)(() => nullable
         ? [
             {
-                color: nullPlaceholderStyle?.color || "gray",
+                color: (nullPlaceholderStyle === null || nullPlaceholderStyle === void 0 ? void 0 : nullPlaceholderStyle.color) || "gray",
                 label: nullLabel || "",
                 value: null,
             },
             ...pickerItems,
         ]
-        : pickerItems, [nullable, nullPlaceholderStyle?.color, nullLabel, pickerItems]);
+        : pickerItems, [nullable, nullPlaceholderStyle === null || nullPlaceholderStyle === void 0 ? void 0 : nullPlaceholderStyle.color, nullLabel, pickerItems]);
     return (<InputComponentPlatform_1.InputComponentPlatform {...props} contentsColor={contentsColor} pickerItemsProps={pickerItemsProps}/>);
 }
 exports.InputComponent = InputComponent;

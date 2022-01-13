@@ -10,6 +10,7 @@ const screen_manager_1 = require("@huds0n/screen-manager");
 const AccessoryView_1 = require("./AccessoryView");
 exports.INPUT_ACCESSORY_VIEW_ID = "HUDS0N_ACCESSORY_VIEW";
 exports.InputAccessoryView = react_1.default.memo((props) => {
+    var _a, _b;
     (0, theming_1.useIsDarkMode)();
     const { deviceWidth, screenMarginLeft } = screen_manager_1.ScreenManager.useDimensions();
     const keyboardColor = theme_1.theme.colors.KEYBOARD;
@@ -19,8 +20,7 @@ exports.InputAccessoryView = react_1.default.memo((props) => {
             height: 200,
             width: deviceWidth,
             marginLeft: -screenMarginLeft,
-            backgroundColor: react_native_1.StyleSheet.flatten(props.accessoryView?.containerStyle)
-                ?.backgroundColor || keyboardColor,
+            backgroundColor: ((_b = react_native_1.StyleSheet.flatten((_a = props.accessoryView) === null || _a === void 0 ? void 0 : _a.containerStyle)) === null || _b === void 0 ? void 0 : _b.backgroundColor) || keyboardColor,
         }}/>
         <AccessoryView_1.AccessoryView {...props}/>
       </react_native_1.InputAccessoryView>);

@@ -16,12 +16,12 @@ exports.initialise = initialise;
 exports.inputYAnim = new react_native_1.Animated.Value(0);
 exports.screenYAnim = new react_native_1.Animated.Value(0);
 let _screenYCurrent = 0;
-react_native_1.Keyboard.addListener("keyboardWillChangeFrame", async (keyboardChangeEvent) => {
+react_native_1.Keyboard.addListener("keyboardWillChangeFrame", (keyboardChangeEvent) => (0, tslib_1.__awaiter)(void 0, void 0, void 0, function* () {
     const { endCoordinates: { screenY }, } = keyboardChangeEvent;
     if (react_native_1.TextInput.State.currentlyFocusedInput()) {
-        await _moveScreen(screenY);
+        yield _moveScreen(screenY);
     }
-});
+}));
 InputState.addInputListener(({ focusedInput }) => {
     if (focusedInput === null) {
         _animateInput(0);
@@ -31,9 +31,11 @@ InputState.addInputListener(({ focusedInput }) => {
         _animateInput(0);
     }
 }, "focusedInput");
-async function getPositionAsync(nodeId) {
-    const { height, pageY } = await (0, utilities_1.measureNodeAsync)(nodeId);
-    return { top: pageY, bottom: pageY + height };
+function getPositionAsync(nodeId) {
+    return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+        const { height, pageY } = yield (0, utilities_1.measureNodeAsync)(nodeId);
+        return { top: pageY, bottom: pageY + height };
+    });
 }
 function _animateInput(translateY) {
     return new Promise((resolve) => {
@@ -66,33 +68,37 @@ function _animateScreen(translateY) {
         });
     });
 }
-async function _moveScreen(inputTop) {
-    const focusedInput = InputState.currentlyFocusedInput();
-    const screenId = _screenRef && (0, react_native_1.findNodeHandle)(_screenRef.current);
-    if (!focusedInput || !screenId) {
-        return null;
-    }
-    const focusedPosition = await getPositionAsync(focusedInput.id);
-    const containerPosition = await getPositionAsync(screenId);
-    if (isNaN(containerPosition.bottom)) {
-        return null;
-    }
-    const inputRelativeToFocus = inputTop - focusedPosition.bottom - _focusedNodePadding;
-    const newTranslation = _screenYCurrent + inputRelativeToFocus;
-    if (newTranslation > 0) {
-        return _animateScreen(0);
-    }
-    const maxTranslation = inputTop - containerPosition.bottom;
-    if (newTranslation < maxTranslation || _screenYCurrent < maxTranslation) {
-        return _animateScreen(maxTranslation);
-    }
-    return _animateScreen(newTranslation);
+function _moveScreen(inputTop) {
+    return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+        const focusedInput = InputState.currentlyFocusedInput();
+        const screenId = _screenRef && (0, react_native_1.findNodeHandle)(_screenRef.current);
+        if (!focusedInput || !screenId) {
+            return null;
+        }
+        const focusedPosition = yield getPositionAsync(focusedInput.id);
+        const containerPosition = yield getPositionAsync(screenId);
+        if (isNaN(containerPosition.bottom)) {
+            return null;
+        }
+        const inputRelativeToFocus = inputTop - focusedPosition.bottom - _focusedNodePadding;
+        const newTranslation = _screenYCurrent + inputRelativeToFocus;
+        if (newTranslation > 0) {
+            return _animateScreen(0);
+        }
+        const maxTranslation = inputTop - containerPosition.bottom;
+        if (newTranslation < maxTranslation || _screenYCurrent < maxTranslation) {
+            return _animateScreen(maxTranslation);
+        }
+        return _animateScreen(newTranslation);
+    });
 }
-async function handleCustomInputChange(height) {
-    if (_screenRef) {
-        const { height: screenHeight, pageY: topOffset } = await (0, utilities_1.measureNodeAsync)(_screenRef.current);
-        _moveScreen(screenHeight + topOffset - height);
-        await _animateInput(-height);
-    }
+function handleCustomInputChange(height) {
+    return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+        if (_screenRef) {
+            const { height: screenHeight, pageY: topOffset } = yield (0, utilities_1.measureNodeAsync)(_screenRef.current);
+            _moveScreen(screenHeight + topOffset - height);
+            yield _animateInput(-height);
+        }
+    });
 }
 exports.handleCustomInputChange = handleCustomInputChange;

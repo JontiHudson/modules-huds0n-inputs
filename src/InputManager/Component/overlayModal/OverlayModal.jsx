@@ -13,11 +13,11 @@ const helpers_1 = require("./helpers");
 const OverlayModal = ({ inputColors }) => {
     const customInput = InputState.useCustomInput();
     const isDark = (0, theming_1.useIsDarkMode)();
-    if (!customInput?.Component)
+    if (!(customInput === null || customInput === void 0 ? void 0 : customInput.Component))
         return null;
     const { Component, props: componentProps } = customInput;
-    const backgroundColor = inputColors?.background || isDark ? theme_1.theme.colors.BLACK : theme_1.theme.colors.WHITE;
-    const contentsColor = inputColors?.contents || isDark ? theme_1.theme.colors.WHITE : theme_1.theme.colors.BLACK;
+    const backgroundColor = (inputColors === null || inputColors === void 0 ? void 0 : inputColors.background) || isDark ? theme_1.theme.colors.BLACK : theme_1.theme.colors.WHITE;
+    const contentsColor = (inputColors === null || inputColors === void 0 ? void 0 : inputColors.contents) || isDark ? theme_1.theme.colors.WHITE : theme_1.theme.colors.BLACK;
     const customInputStyle = {
         height: "100%",
         width: "100%",
