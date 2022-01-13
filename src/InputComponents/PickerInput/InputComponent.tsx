@@ -17,23 +17,23 @@ import { useCallback, useMemo } from "@huds0n/utilities";
 import { InputManager } from "../../InputManager";
 import type { Types } from "../../types";
 
-export function InputComponent<T = any>({
-  onValueChange,
-  nullable = true,
-  nullPlaceholderStyle,
-  nullLabel = "- Please Select -",
-  pickerItems,
-  style,
-  value,
-  onBlur,
-  onFocus,
-  ...rest
-}: Types.CustomInputSubComponentProps<T, Types.PickerSpecficProps<T>>) {
+import { InputComponentPlatform } from "./InputComponentPlatform";
+
+export function InputComponent<T = any>(
+  props: Types.CustomInputSubComponentProps<T, Types.PickerSpecficProps<T>>
+) {
+  const {
+    nullable = true,
+    nullPlaceholderStyle,
+    nullLabel = "- Please Select -",
+    pickerItems,
+  } = props;
+
   const isDark = useIsDarkMode();
 
   const contentsColor = isDark ? theme.colors.WHITE : theme.colors.BLACK;
 
-  const _pickerItems = useMemo(
+  const pickerItemsProps = useMemo(
     (): Types.PickItemProps<T | null>[] =>
       nullable
         ? [
@@ -48,59 +48,11 @@ export function InputComponent<T = any>({
     [nullable, nullPlaceholderStyle?.color, nullLabel, pickerItems]
   );
 
-  if (Platform.OS === "ios") {
-    const PickerItems = useMemo(() => {
-      return _pickerItems.map((pickerItem) => (
-        <Picker.Item
-          key={pickerItem.label || "_NULL_"}
-          {...pickerItem}
-          color={pickerItem.color || contentsColor}
-        />
-      ));
-    }, [_pickerItems, contentsColor]);
-
-    return (
-      <View
-        style={StyleSheet.flatten([
-          { maxHeight: Dimensions.get("window").height },
-        ])}
-      >
-        <Picker selectedValue={value} onValueChange={onValueChange} {...rest}>
-          {PickerItems}
-        </Picker>
-      </View>
-    );
-  }
-
-  const renderItem = useCallback(
-    (item, index) => (
-      <Pressable
-        feedback="fade"
-        key={index.toString()}
-        style={{ padding: theme.spacings.M }}
-        onPress={() => {
-          onValueChange(item.value);
-          InputManager.dismiss();
-        }}
-      >
-        <Text
-          style={{
-            color: item.color || contentsColor,
-            fontSize: theme.fontSizes.LABEL,
-          }}
-        >
-          {item.label}
-        </Text>
-      </Pressable>
-    ),
-    [onValueChange, contentsColor]
-  );
-
-  return Platform.OS === "android" ? (
-    <View>
-      <ScrollView>{_pickerItems.map(renderItem)}</ScrollView>
-    </View>
-  ) : (
-    <ScrollView>{_pickerItems.map(renderItem)}</ScrollView>
+  return (
+    <InputComponentPlatform
+      {...props}
+      contentsColor={contentsColor}
+      pickerItemsProps={pickerItemsProps}
+    />
   );
 }
