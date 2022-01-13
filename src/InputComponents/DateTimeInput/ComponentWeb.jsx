@@ -17,11 +17,14 @@ exports.DateTimeWeb = react_1.default.forwardRef((props, ref) => {
     const formatComponents = mode === "time" ? ["HH", "mm"] : getDateFormat(webInputFormat, delimiter);
     const inputRef = (0, utilities_1.useRef)(null);
     (0, react_1.useImperativeHandle)(ref, () => ({
-        focus: () => { var _a; return (_a = inputRef.current) === null || _a === void 0 ? void 0 : _a.focus(); },
+        focus: () => inputRef.current?.focus(),
     }));
     const [text, setText] = (0, utilities_1.useState)("");
     const localError = !value && !!text && invalidDateError;
-    const { error, onValueChange } = (0, helpers_1.handleValueValidation)(Object.assign(Object.assign({}, props), { customError: customError || localError, validator: (0, utilities_1.useMemo)(() => {
+    const { error, onValueChange } = (0, helpers_1.handleValueValidation)({
+        ...props,
+        customError: customError || localError,
+        validator: (0, utilities_1.useMemo)(() => {
             const combinedValidation = validator ? [...(0, utilities_1.toArray)(validator)] : [];
             if (maximumDate) {
                 combinedValidation.push(validators_1.validators.date({
@@ -36,7 +39,8 @@ exports.DateTimeWeb = react_1.default.forwardRef((props, ref) => {
                 }));
             }
             return combinedValidation;
-        }, [validator, maximumDate, minimumDate, localError]) }));
+        }, [validator, maximumDate, minimumDate, localError]),
+    });
     const updateValue = (0, utilities_1.useCallback)((t) => {
         try {
             let newDate;
@@ -91,7 +95,7 @@ exports.DateTimeWeb = react_1.default.forwardRef((props, ref) => {
             onValueChange(newDate);
             return newDate;
         }
-        catch (_a) {
+        catch {
             onValueChange(null);
             return null;
         }
@@ -230,16 +234,15 @@ function getDateFormat(webInputFormat, webInputDelimiter) {
 function handleFocusBlur({ onBlur, onFocus, setIsFocused, value }, ref, dateError, setText) {
     const isFocused = InputState.useIsFocused(ref);
     (0, utilities_1.useEffect)(() => {
-        var _a;
         if (isFocused) {
-            (_a = ref.current) === null || _a === void 0 ? void 0 : _a.focus();
+            ref.current?.focus();
             onFocus && onFocus(value, dateError);
         }
         else {
             setText("");
             onBlur && onBlur(value, dateError);
         }
-        setIsFocused === null || setIsFocused === void 0 ? void 0 : setIsFocused(isFocused);
+        setIsFocused?.(isFocused);
     }, [isFocused], { skipMounts: true });
     return isFocused;
 }

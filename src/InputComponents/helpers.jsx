@@ -27,46 +27,43 @@ function handleValueValidation(props) {
     const _onValueChange = (0, utilities_1.useCallback)((newValue) => {
         const newError = handleValidation(props, newValue);
         setError(newError || customError);
-        onValueChange && (onValueChange === null || onValueChange === void 0 ? void 0 : onValueChange(newValue, newError || customError));
+        onValueChange && onValueChange?.(newValue, newError || customError);
     }, [onValueChange, customError]);
     return { error, onValueChange: _onValueChange };
 }
 exports.handleValueValidation = handleValueValidation;
 function handleValidation({ customError, isRequired, onErrorChange, validator }, value) {
     if (customError) {
-        onErrorChange === null || onErrorChange === void 0 ? void 0 : onErrorChange(customError);
+        onErrorChange?.(customError);
         return customError;
     }
     const nullish = value === null || value === undefined || value === "";
     if (nullish && isRequired) {
-        onErrorChange === null || onErrorChange === void 0 ? void 0 : onErrorChange(isRequired);
+        onErrorChange?.(isRequired);
         return typeof isRequired === "string" ? isRequired : "Required";
     }
     if (nullish || !validator) {
-        onErrorChange === null || onErrorChange === void 0 ? void 0 : onErrorChange(undefined);
+        onErrorChange?.(undefined);
         return;
     }
     const validationError = getValidatorError(value, validator);
-    onErrorChange === null || onErrorChange === void 0 ? void 0 : onErrorChange(validationError);
+    onErrorChange?.(validationError);
     return validationError;
 }
 function handleFieldInputAware(props) {
     const [error, setError] = (0, utilities_1.useState)(undefined);
     const [isFocused, setFocused] = (0, utilities_1.useState)(false);
     const onErrorChange = (0, utilities_1.useCallback)((newError) => {
-        var _a;
         setError(newError);
-        props.onErrorChange && ((_a = props.onErrorChange) === null || _a === void 0 ? void 0 : _a.call(props, newError));
+        props.onErrorChange && props.onErrorChange?.(newError);
     }, [props.onErrorChange]);
     const onBlur = (0, utilities_1.useCallback)((value, error) => {
-        var _a;
         setFocused(false);
-        props.onBlur && ((_a = props.onBlur) === null || _a === void 0 ? void 0 : _a.call(props, value, error));
+        props.onBlur && props.onBlur?.(value, error);
     }, [props.onBlur]);
     const onFocus = (0, utilities_1.useCallback)((value, error) => {
-        var _a;
         setFocused(true);
-        props.onFocus && ((_a = props.onFocus) === null || _a === void 0 ? void 0 : _a.call(props, value, error));
+        props.onFocus && props.onFocus?.(value, error);
     }, [props.onFocus]);
     return {
         fieldProps: { error, isFocused },

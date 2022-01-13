@@ -12,7 +12,7 @@ const InputState = (0, tslib_1.__importStar)(require("../state"));
 exports.Contents = react_1.default.memo(({ accessoryView: { iconDismiss = defaultIcons.dismiss, iconDown = defaultIcons.down, iconSubmit = defaultIcons.submit, iconUp = defaultIcons.up, } = {}, inputColors, }) => {
     const isDark = (0, theming_1.useIsDarkMode)();
     const keyboardColor = theme_1.theme.colors.KEYBOARD;
-    const contentsColor = (inputColors === null || inputColors === void 0 ? void 0 : inputColors.contents) || isDark ? theme_1.theme.colors.WHITE : theme_1.theme.colors.BLACK;
+    const contentsColor = inputColors?.contents || isDark ? theme_1.theme.colors.WHITE : theme_1.theme.colors.BLACK;
     const { downPress, submitPress, upPress } = InputState.useAccessoryView();
     const handleDownPress = (0, utilities_1.useCallback)(() => downPress && downPress(), [downPress]);
     const handleSubmitPress = (0, utilities_1.useCallback)(() => {

@@ -16,7 +16,14 @@ function createCustomInput(OutputComponent, InputComponent) {
         const putInputComponent = (0, utilities_1.useCallback)(() => {
             InputState.updateCustomInput(viewNodeRef, {
                 Component: InputComponent,
-                props: Object.assign(Object.assign({ closeInput: InputState.dismissInput, openInput: openInput, isFocused: isFocused }, props), { error: error, onValueChange: onValueChange }),
+                props: {
+                    closeInput: InputState.dismissInput,
+                    openInput: openInput,
+                    isFocused: isFocused,
+                    ...props,
+                    error: error,
+                    onValueChange: onValueChange,
+                },
             }, { downPress, upPress, submitPress: onSubmitEditing });
         }, [...Object.values(props), isFocused, error, onValueChange]);
         function openInput() {
@@ -35,19 +42,18 @@ function createCustomInput(OutputComponent, InputComponent) {
             autoFocus && openInput();
         });
         (0, utilities_1.onDismount)(() => {
-            var _a;
-            if (viewNodeRef.current === ((_a = InputState.currentlyFocusedInput()) === null || _a === void 0 ? void 0 : _a.id)) {
+            if (viewNodeRef.current === InputState.currentlyFocusedInput()?.id) {
                 InputState.dismissInput();
             }
         });
         (0, utilities_1.useEffect)(() => {
             if (isFocused) {
-                onFocus && (onFocus === null || onFocus === void 0 ? void 0 : onFocus(value, error));
-                setIsFocused === null || setIsFocused === void 0 ? void 0 : setIsFocused(true);
+                onFocus && onFocus?.(value, error);
+                setIsFocused?.(true);
             }
             else {
-                onBlur && (onBlur === null || onBlur === void 0 ? void 0 : onBlur(value, error));
-                setIsFocused === null || setIsFocused === void 0 ? void 0 : setIsFocused(false);
+                onBlur && onBlur?.(value, error);
+                setIsFocused?.(false);
             }
         }, [isFocused], { skipMounts: true });
         (0, utilities_1.useImperativeHandle)(ref, () => ({ focus: openInput }), [openInput]);

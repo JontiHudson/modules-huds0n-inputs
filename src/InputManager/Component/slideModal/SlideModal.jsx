@@ -17,9 +17,8 @@ const SlideModal = (props) => {
     (0, theming_1.useIsDarkMode)();
     const wrapperRef = (0, react_1.useRef)(null);
     (0, utilities_1.useEffect)(() => {
-        var _a;
         if (currentInput) {
-            (_a = wrapperRef.current) === null || _a === void 0 ? void 0 : _a.measure((x, y, width, height) => {
+            wrapperRef.current?.measure((x, y, width, height) => {
                 (0, helpers_1.handleCustomInputChange)(height);
             });
         }

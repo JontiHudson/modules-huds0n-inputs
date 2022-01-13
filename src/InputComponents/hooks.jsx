@@ -13,18 +13,15 @@ function useInput(options) {
         setValue(options.defaultValue);
     });
     const focus = (0, utilities_1.useCallback)(() => {
-        var _a;
-        (_a = ref.current) === null || _a === void 0 ? void 0 : _a.focus();
+        ref.current?.focus();
     });
     const onErrorChange = (0, utilities_1.useCallback)((newError) => {
-        var _a;
         setError(newError);
-        (_a = options.onErrorChange) === null || _a === void 0 ? void 0 : _a.call(options, newError);
+        options.onErrorChange?.(newError);
     });
     const onValueChange = (0, utilities_1.useCallback)((newValue, error) => {
-        var _a;
         setValue(newValue);
-        (_a = options.onValueChange) === null || _a === void 0 ? void 0 : _a.call(options, newValue, error);
+        options.onValueChange?.(newValue, error);
     });
     return {
         customError,
@@ -49,24 +46,32 @@ function useInput(options) {
     };
 }
 function useTextInput(options) {
-    return useInput(Object.assign({ defaultValue: "" }, options));
+    return useInput({
+        defaultValue: "",
+        ...options,
+    });
 }
 exports.useTextInput = useTextInput;
 function usePickerInput(options) {
-    return useInput(Object.assign({ defaultValue: null }, options));
+    return useInput({
+        defaultValue: null,
+        ...options,
+    });
 }
 exports.usePickerInput = usePickerInput;
 function useDateTimeInput(options) {
-    return useInput(Object.assign({ defaultValue: null }, options));
+    return useInput({
+        defaultValue: null,
+        ...options,
+    });
 }
 exports.useDateTimeInput = useDateTimeInput;
 function useForm(...args) {
     args.forEach((element, i) => {
-        var _a, _b;
         if (i)
-            element.upPress = (_a = args[i - 1]) === null || _a === void 0 ? void 0 : _a.focus;
+            element.upPress = args[i - 1]?.focus;
         if (i < args.length - 1)
-            element.downPress = (_b = args[i + 1]) === null || _b === void 0 ? void 0 : _b.focus;
+            element.downPress = args[i + 1]?.focus;
     });
     const isError = args.some((element) => element.error);
     const isModified = args.some((element) => element.isModified);

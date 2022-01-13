@@ -5,9 +5,9 @@ const tslib_1 = require("tslib");
 const react_native_1 = require("react-native");
 const InputState = (0, tslib_1.__importStar)(require("../../../state"));
 exports.inputOpacityAnim = new react_native_1.Animated.Value(0);
-react_native_1.Keyboard.addListener("keyboardDidHide", () => (0, tslib_1.__awaiter)(void 0, void 0, void 0, function* () {
+react_native_1.Keyboard.addListener("keyboardDidHide", async () => {
     let listener = null;
-    const isChangeFocus = yield new Promise((resolve) => {
+    const isChangeFocus = await new Promise((resolve) => {
         listener = react_native_1.Keyboard.addListener("keyboardDidShow", () => {
             resolve(true);
         });
@@ -21,12 +21,12 @@ react_native_1.Keyboard.addListener("keyboardDidHide", () => (0, tslib_1.__await
     if (!isChangeFocus && !InputState.currentCustomInput()) {
         InputState.dismissInput();
     }
-}));
-InputState.addInputListener(({ focusedInput, customInput }) => (0, tslib_1.__awaiter)(void 0, void 0, void 0, function* () {
+});
+InputState.addInputListener(async ({ focusedInput, customInput }) => {
     if (customInput) {
-        _animateInput((focusedInput === null || focusedInput === void 0 ? void 0 : focusedInput.type) === "CUSTOM" ? 1 : 0);
+        _animateInput(focusedInput?.type === "CUSTOM" ? 1 : 0);
     }
-}), "focusedInput");
+}, "focusedInput");
 function _animateInput(opacity) {
     react_native_1.Animated.timing(exports.inputOpacityAnim, {
         easing: react_native_1.Easing.out(react_native_1.Easing.quad),

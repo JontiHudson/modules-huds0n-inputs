@@ -21,22 +21,26 @@ function handleAndroidBlurOnKeyboardHide(ref) {
         const textInputId = (0, utilities_1.getNodeId)(ref.current, true);
         const focusedInput = InputState.useFocusedInput();
         (0, utilities_1.useEffect)(() => {
-            var _a;
             if (!focusedInput &&
                 textInputId ===
                     (0, utilities_1.getNodeId)(react_native_1.TextInput.State.currentlyFocusedInput(), true)) {
-                (_a = ref.current) === null || _a === void 0 ? void 0 : _a.blur();
+                ref.current?.blur();
             }
         }, [focusedInput], { layout: "BEFORE" });
     }
 }
 exports.handleAndroidBlurOnKeyboardHide = handleAndroidBlurOnKeyboardHide;
 exports.defaultStyles = {
-    base: Object.assign({ get color() {
+    base: {
+        get color() {
             return theme_1.theme.colors.TEXT;
-        }, paddingTop: 0, fontSize: theme_1.theme.fontSizes.BODY }, (react_native_1.Platform.OS === "web" && {
-        outlineStyle: "none",
-    })),
+        },
+        paddingTop: 0,
+        fontSize: theme_1.theme.fontSizes.BODY,
+        ...(react_native_1.Platform.OS === "web" && {
+            outlineStyle: "none",
+        }),
+    },
     disabled: {
         get color() {
             return theme_1.theme.colors.DISABLED;

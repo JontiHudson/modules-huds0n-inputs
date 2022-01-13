@@ -11,7 +11,7 @@ const InputState = (0, tslib_1.__importStar)(require("../../state"));
 const helpers_1 = require("../helpers");
 const helpers_2 = require("./helpers");
 exports.TextInput = react_1.default.forwardRef((props, ref) => {
-    const { clearTextOnFocus, disabled, disabledStyle, disableSubmit, downPress, errorStyle, multiline, onBlur, onChange, onChangeText, onFocus, onSubmitEditing, setIsFocused, style, upPress } = props, restProps = (0, tslib_1.__rest)(props, ["clearTextOnFocus", "disabled", "disabledStyle", "disableSubmit", "downPress", "errorStyle", "multiline", "onBlur", "onChange", "onChangeText", "onFocus", "onSubmitEditing", "setIsFocused", "style", "upPress"]);
+    const { clearTextOnFocus, disabled, disabledStyle, disableSubmit, downPress, errorStyle, multiline, onBlur, onChange, onChangeText, onFocus, onSubmitEditing, setIsFocused, style, upPress, ...restProps } = props;
     const isDark = (0, theming_1.useIsDarkMode)();
     const textInputRef = (0, utilities_1.useCopyRef)(ref);
     const { error, onValueChange } = (0, helpers_1.handleValueValidation)(props);
@@ -28,9 +28,9 @@ exports.TextInput = react_1.default.forwardRef((props, ref) => {
     const handleLifecycle = (0, utilities_1.useMemo)(() => ({
         onChange: (e) => {
             const { nativeEvent: { text }, } = e;
-            onChange === null || onChange === void 0 ? void 0 : onChange(e);
-            onChangeText === null || onChangeText === void 0 ? void 0 : onChangeText(text);
-            onValueChange === null || onValueChange === void 0 ? void 0 : onValueChange(text);
+            onChange?.(e);
+            onChangeText?.(text);
+            onValueChange?.(text);
         },
         onFocus: (e) => {
             InputState.focusTextInput(textInputRef, {
@@ -40,11 +40,11 @@ exports.TextInput = react_1.default.forwardRef((props, ref) => {
             });
             clearTextOnFocus && onValueChange("");
             onFocus && onFocus(e.nativeEvent.text, error);
-            setIsFocused === null || setIsFocused === void 0 ? void 0 : setIsFocused(true);
+            setIsFocused?.(true);
         },
         onBlur: (e) => {
             onBlur && onBlur(e.nativeEvent.text, error);
-            setIsFocused === null || setIsFocused === void 0 ? void 0 : setIsFocused(false);
+            setIsFocused?.(false);
         },
         onSubmitEditing: (e) => {
             if (multiline)
